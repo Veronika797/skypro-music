@@ -34,6 +34,9 @@
   background-color: #313131;
   border-radius: 50%;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sidebar__block {
@@ -71,9 +74,4 @@
 
 .sidebar__item:not(:last-child) {
   margin-bottom: 30px;
-}
-
-.sidebar__link {
-  width: 100%;
-  height: 100%;
 }

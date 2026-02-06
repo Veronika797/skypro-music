@@ -1,8 +1,16 @@
+'use client';
 import classNames from 'classnames';
 import styles from '@bar/bar.module.css';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function Bar() {
+  const [isLiked, setIsLiked] = useState(false);
+
+  const toggleLike = () => {
+    setIsLiked(!isLiked);
+  };
+
   return (
     <div className={styles.bar}>
       <div className={styles.bar__content}>
@@ -12,24 +20,24 @@ export default function Bar() {
             <div className={styles.player__controls}>
               <div className={styles.player__btnPrev}>
                 <svg className={styles.player__btnPrevSvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-prev"></use>
+                  <use xlinkHref="/img/logo/prev.svg"></use>
                 </svg>
               </div>
               <div className={classNames(styles.player__btnPlay, styles.btn)}>
                 <svg className={styles.player__btnPlaySvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-play"></use>
+                  <use xlinkHref="/img/logo/play.svg"></use>
                 </svg>
               </div>
               <div className={styles.player__btnNext}>
                 <svg className={styles.player__btnNextSvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-next"></use>
+                  <use xlinkHref="/img/logo/next.svg"></use>
                 </svg>
               </div>
               <div
                 className={classNames(styles.player__btnRepeat, styles.btnIcon)}
               >
                 <svg className={styles.player__btnRepeatSvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-repeat"></use>
+                  <use xlinkHref="/img/logo/repeat.svg"></use>
                 </svg>
               </div>
               <div
@@ -39,7 +47,7 @@ export default function Bar() {
                 )}
               >
                 <svg className={styles.player__btnShuffleSvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-shuffle"></use>
+                  <use xlinkHref="/img/logo/shuffle.svg"></use>
                 </svg>
               </div>
             </div>
@@ -48,7 +56,7 @@ export default function Bar() {
               <div className={styles.trackPlay__contain}>
                 <div className={styles.trackPlay__image}>
                   <svg className={styles.trackPlay__svg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-note"></use>
+                    <use xlinkHref="/img/logo/note.svg"></use>
                   </svg>
                 </div>
                 <div className={styles.trackPlay__author}>
@@ -69,19 +77,20 @@ export default function Bar() {
                     styles.player__btnShuffle,
                     styles.btnIcon,
                   )}
+                  onClick={toggleLike}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={isLiked ? 'Dislike' : 'Like'}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') toggleLike();
+                  }}
                 >
                   <svg className={styles.trackPlay__likeSvg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
-                  </svg>
-                </div>
-                <div
-                  className={classNames(
-                    styles.trackPlay__dislike,
-                    styles.btnIcon,
-                  )}
-                >
-                  <svg className={styles.trackPlay__dislikeSvg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-dislike"></use>
+                    <use
+                      xlinkHref={
+                        isLiked ? '/img/logo/dislike.svg' : '/img/logo/like.svg'
+                      }
+                    ></use>
                   </svg>
                 </div>
               </div>
@@ -91,7 +100,7 @@ export default function Bar() {
             <div className={styles.volume__content}>
               <div className={styles.volume__image}>
                 <svg className={styles.volume__svg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-volume"></use>
+                  <use xlinkHref="/img/logo/volume.svg"></use>
                 </svg>
               </div>
               <div className={classNames(styles.volume__progress, styles.btn)}>
