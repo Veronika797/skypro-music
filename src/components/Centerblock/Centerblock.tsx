@@ -1,78 +1,73 @@
-import classnames from 'classnames';
-import Link from 'next/link';
+'use client';
 import styles from '@centerblock/centerblock.module.css';
-import Search from '@/Search/Search';
+import Search from '@search/Search';
+import Filter from '@filter/Filter';
+import Track from '@track/Track';
+import FilterItem from '@filterItem/FilterItem';
 import { data } from '@/data';
-import { formatTime } from '../Utils/helper';
-import { Track } from '@/SharedTypes/SharedTypes';
+import { useState } from 'react';
 
 export default function Centerblock() {
+  const [filter, setFilter] = useState<{
+    author: string | null;
+    genre: string | null;
+    year: 'asc' | 'desc' | 'default' | null;
+  }>({
+    author: null,
+    genre: null,
+    year: 'default',
+  });
+
+  const filteredTracks = data
+    .filter((track) => {
+      if (filter.author && track.author !== filter.author) return false;
+      if (filter.genre && !track.genre.includes(filter.genre)) return false;
+      return true;
+    })
+    .sort((a, b) => {
+      if (filter.year === 'desc') {
+        return (
+          new Date(b.release_date).getTime() -
+          new Date(a.release_date).getTime()
+        );
+      }
+      if (filter.year === 'asc') {
+        return (
+          new Date(a.release_date).getTime() -
+          new Date(b.release_date).getTime()
+        );
+      }
+      return 0;
+    });
+
+  const handleFilterChange = (type: string, value: string) => {
+    setFilter((prev) => {
+      if (type === 'author' && prev.author === value) {
+        return { ...prev, author: null };
+      }
+      if (type === 'genre' && prev.genre === value) {
+        return { ...prev, genre: null };
+      }
+      if (type === 'year' && prev.year === value) {
+        return { ...prev, year: 'default' };
+      }
+      return {
+        author: type === 'author' ? value : prev.author,
+        genre: type === 'genre' ? value : prev.genre,
+        year:
+          type === 'year' ? (value as 'asc' | 'desc' | 'default') : prev.year,
+      };
+    });
+  };
+
   return (
     <div className={styles.centerblock}>
       <Search />
       <h2 className={styles.centerblock__h2}>Треки</h2>
-      <div className={styles.centerblock__filter}>
-        <div className={styles.filter__title}>Искать по:</div>
-        <div className={styles.filter__button}>исполнителю</div>
-        <div className={styles.filter__button}>году выпуска</div>
-        <div className={styles.filter__button}>жанру</div>
-      </div>
+      <FilterItem onFilterChange={handleFilterChange} />
       <div className={styles.centerblock__content}>
-        <div className={styles.content__title}>
-          <div className={classnames(styles.playlistTitle__col, styles.col01)}>
-            Трек
-          </div>
-          <div className={classnames(styles.playlistTitle__col, styles.col02)}>
-            Исполнитель
-          </div>
-          <div className={classnames(styles.playlistTitle__col, styles.col03)}>
-            Альбом
-          </div>
-          <div className={classnames(styles.playlistTitle__col, styles.col04)}>
-            <svg className={classnames(styles.playlistTitle__svg)}>
-              <use xlinkHref="/img/logo/watch.svg"></use>
-            </svg>
-          </div>
-        </div>
-        <div className={styles.content__playlist}>
-          {data.map((track: Track) => (
-            <div key={track._id} className={styles.playlist__item}>
-              <div className={styles.playlist__track}>
-                <div className={styles.track__title}>
-                  <div className={styles.track__titleImage}>
-                    <svg className={styles.track__titleSvg}>
-                      <use xlinkHref="/img/logo/note.svg"></use>
-                    </svg>
-                  </div>
-                  <div>
-                    <Link className={styles.track__titleLink} href="">
-                      {track.name}{' '}
-                      <span className={styles.track__titleSpan}></span>
-                    </Link>
-                  </div>
-                </div>
-                <div className={styles.track__author}>
-                  <Link className={styles.track__authorLink} href="">
-                    {track.author}
-                  </Link>
-                </div>
-                <div className={styles.track__album}>
-                  <Link className={styles.track__albumLink} href="">
-                    {track.album}
-                  </Link>
-                </div>
-                <div className={styles.track__content}>
-                  <svg className={styles.track__timeSvg}>
-                    <use xlinkHref="/img/logo/like.svg"></use>
-                  </svg>
-                  <span className={styles.track__timeText}>
-                    {formatTime(track.duration_in_seconds)}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <Filter />
+        <Track tracks={filteredTracks} />
       </div>
     </div>
   );

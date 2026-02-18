@@ -25,8 +25,13 @@
       "@navigation/*": ["./src/components/Navigation/*"],
       "@sidebar/*": ["./src/components/Sidebar/*"],
       "@centerblock/*": ["./src/components/Centerblock/*"],
+      "@filter/*": ["./src/components/Filter/*"],
+      "@filterItem/*": ["./src/components/FilterItem/*"],
+      "@track/*": ["./src/components/Track/*"],
+      "@search/*": ["./src/components/Search/*"],
       "@styles/*": ["./src/styles/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@data/*": ["./src/data/*"]
     }
   },
   "include": [

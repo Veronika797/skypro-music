@@ -1,4 +1,4 @@
-export interface Track {
+export interface TypesTrack {
   _id: number;
   name: string;
   author: string;

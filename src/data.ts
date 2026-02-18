@@ -1,6 +1,6 @@
-import { Track } from './SharedTypes/SharedTypes';
+import { TypesTrack } from '@/SharedTypes/SharedTypes';
 
-export const data: Track[] = [
+export const data: TypesTrack[] = [
   {
     _id: 8,
     name: 'Chase',
