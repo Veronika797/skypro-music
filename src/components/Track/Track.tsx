@@ -4,16 +4,31 @@ import { formatTime } from '@/Utils/helper';
 import Link from 'next/link';
 import styles from '@track/Track.module.css';
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { setCurrentTrack } from '@/store/features/trackSlice';
 
 interface TrackProps {
   tracks: TypesTrack[];
 }
 
 export default function Track({ tracks }: TrackProps) {
+  const dispatch = useAppDispatch();
+  const currentTrack = useAppSelector((state) => state.track.currentTrack);
+
+  const handleTrackClick = (track: TypesTrack) => {
+    dispatch(setCurrentTrack(track));
+  };
+
   return (
     <div className={styles.content__playlist}>
       {tracks.map((track) => (
-        <div key={track._id} className={styles.playlist__item}>
+        <div
+          key={track._id}
+          className={`${styles.playlist__item} ${
+            currentTrack?._id === track._id ? styles.active : ''
+          }`}
+          onClick={() => handleTrackClick(track)}
+        >
           <div className={styles.playlist__track}>
             <div className={styles.track__title}>
               <div className={styles.track__titleImage}>
