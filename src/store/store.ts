@@ -5,7 +5,7 @@ import trackReducer from '@/store/features/trackSlice';
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      track: trackReducer,
+      tracks: trackReducer,
     },
   });
 };
