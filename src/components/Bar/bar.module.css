@@ -186,11 +186,57 @@
   grid-area: image;
 }
 
-.trackPlay__svg {
-  width: 20px;
-  height: 19px;
-  fill: transparent;
-  stroke: #4e4e4e;
+.playIndicator {
+  position: relative;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  background-color: #1db954;
+  opacity: 1;
+}
+.playIndicator--paused {
+  background-color: #1db954;
+  opacity: 1;
+}
+
+.playIndicator--playing {
+  animation: pulseRing 1.6s infinite ease-out;
+}
+
+.playIndicator--playing::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #1db954;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: pulseOuter 1.6s infinite ease-out;
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes pulseOuter {
+  0% {
+    width: 8px;
+    height: 8px;
+    opacity: 0.8;
+  }
+  100% {
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+  }
 }
 
 .trackPlay__author {
