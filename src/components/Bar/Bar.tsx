@@ -33,12 +33,12 @@ export default function Bar() {
 
   if (!currentTrack) {
     return (
-      <div className={styles.bar}>
-        <div className={styles.bar__content}>
+      <div className={styles.barTrack}>
+        {/* <div className={styles.bar__content}>
           <div className={styles.player__trackPlay}>
             <div className={styles.trackPlay__contain}></div>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
