@@ -31,14 +31,21 @@ export default function Bar() {
     }
   }, [isPlaying, currentTrack, dispatch]);
 
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.volume = volume / 100;
+  }, [volume]);
+
   if (!currentTrack) {
     return (
       <div className={styles.barTrack}>
-        {/* <div className={styles.bar__content}>
+        <div className={styles.bar__content}>
           <div className={styles.player__trackPlay}>
             <div className={styles.trackPlay__contain}></div>
           </div>
-        </div> */}
+        </div>
       </div>
     );
   }
@@ -59,6 +66,7 @@ export default function Bar() {
       setIsMuted(false);
     }
   };
+
   const toggleMute = () => {
     if (isMuted) {
       setVolume(savedVolume);
@@ -183,6 +191,9 @@ export default function Bar() {
                 onClick={toggleMute}
                 role="button"
                 tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') toggleMute();
+                }}
               >
                 <svg className={styles.volume__svg}>
                   <use
