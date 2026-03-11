@@ -1,0 +1,20 @@
+.app {
+  text-align: center;
+  padding: 40px;
+  background-color: #111;
+  color: #fff;
+}
+
+.button {
+  background: #b672ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #c88eff;
+}

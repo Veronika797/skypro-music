@@ -5,9 +5,20 @@ import Filter from '@filter/Filter';
 import Track from '@track/Track';
 import FilterItem from '@filterItem/FilterItem';
 import { data } from '@/data';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { setPlaylist } from '@/store/features/trackSlice';
+import { TypesTrack } from '@/SharedTypes/SharedTypes';
+
+const playlistsAreEqual = (a: TypesTrack[], b: TypesTrack[]) => {
+  if (a.length !== b.length) return false;
+  return a.every((track, index) => track._id === b[index]?._id);
+};
 
 export default function Centerblock() {
+  const dispatch = useAppDispatch();
+  const playlistInStore = useAppSelector((state) => state.tracks.playlist);
+
   const [filter, setFilter] = useState<{
     author: string | null;
     genre: string | null;
@@ -39,6 +50,12 @@ export default function Centerblock() {
       }
       return 0;
     });
+
+  useEffect(() => {
+    if (!playlistsAreEqual(filteredTracks, playlistInStore)) {
+      dispatch(setPlaylist(filteredTracks));
+    }
+  }, [filteredTracks, dispatch, playlistInStore]);
 
   const handleFilterChange = (type: string, value: string) => {
     setFilter((prev) => {
