@@ -1,0 +1,63 @@
+.styledProgressInput {
+  --progress-height: 5px;
+  --progress-color: #b672ff;
+  --progress-bg-color: #2e2e2e;
+  margin: 0;
+  width: 100%;
+  height: var(--progress-height);
+  appearance: none;
+  cursor: pointer;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+  transition: height 0.2s ease;
+}
+
+.styledProgressInput:hover {
+  --progress-height: 8px;
+}
+
+.styledProgressInput::-webkit-slider-runnable-track {
+  height: var(--progress-height);
+  background: var(--progress-bg-color);
+  border-radius: 999px;
+}
+
+.styledProgressInput::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--thumb-width);
+  height: var(--thumb-height);
+  margin-top: -2.5px;
+  background-color: var(--progress-color);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: -100vmax 0 0 100vmax var(--progress-color);
+  cursor: pointer;
+}
+
+.styledProgressInput::-webkit-slider-thumb:hover {
+  background: #fff;
+}
+
+.styledProgressInput::-moz-range-track {
+  height: var(--progress-height);
+  background: var(--progress-bg-color);
+  border-radius: 999px;
+  border: none;
+}
+
+.styledProgressInput::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--progress-color);
+  border: none;
+  cursor: pointer;
+}
+
+.styledProgressInput::-moz-range-progress {
+  background-color: var(--progress-color);
+  height: var(--progress-height);
+  border-radius: 999px;
+}

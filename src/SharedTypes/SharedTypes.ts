@@ -4,7 +4,7 @@ export interface TypesTrack {
   author: string;
   release_date: string;
   genre: string[];
-  duration_in_seconds: number;
+  duration: number;
   album: string;
   logo: null;
   track_file: string;

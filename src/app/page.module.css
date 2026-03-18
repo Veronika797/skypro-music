@@ -15,6 +15,19 @@
   display: flex;
 }
 
+@media (max-width: 1440px) {
+  .main {
+    height: 816px;
+  }
+}
+
+@media (min-width: 1441px) and (max-width: 1600px) {
+  .main {
+    max-height: 1600px;
+    height: auto;
+  }
+}
+
 .main__nav {
   width: 244px;
   background-color: #181818;
