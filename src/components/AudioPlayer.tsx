@@ -7,10 +7,10 @@ import {
   setCurrentTrack,
   setDuration,
 } from '@/store/features/trackSlice';
-import { TypesTrack } from '@/SharedTypes/SharedTypes';
+import { TrackType } from '@/SharedTypes/SharedTypes';
 
 type AudioPlayerProps = {
-  playlist: TypesTrack[];
+  playlist: TrackType[];
 };
 
 const AudioPlayer = ({ playlist }: AudioPlayerProps) => {

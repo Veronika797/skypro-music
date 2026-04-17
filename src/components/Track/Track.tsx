@@ -3,7 +3,7 @@
 import { formatTime } from '@/Utils/helper';
 import Link from 'next/link';
 import styles from '@track/Track.module.css';
-import { TypesTrack } from '@/SharedTypes/SharedTypes';
+import { TrackType } from '@/SharedTypes/SharedTypes';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import {
   setCurrentTrack,
@@ -14,7 +14,7 @@ import classNames from 'classnames';
 import { useEffect } from 'react';
 
 interface TrackProps {
-  tracks: TypesTrack[];
+  tracks: TrackType[];
 }
 
 export default function Track({ tracks }: TrackProps) {
@@ -33,7 +33,7 @@ export default function Track({ tracks }: TrackProps) {
     }
   }, [tracks, dispatch, playlistInStore]);
 
-  const handleTrackClick = (track: TypesTrack) => {
+  const handleTrackClick = (track: TrackType) => {
     const isSameTrack = currentTrack?._id === track._id;
     if (isSameTrack) {
       dispatch(setIsPlay(!isPlaying));

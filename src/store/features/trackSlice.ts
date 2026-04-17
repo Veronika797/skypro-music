@@ -1,12 +1,12 @@
-import { TypesTrack } from '@/SharedTypes/SharedTypes';
+import { TrackType } from '@/SharedTypes/SharedTypes';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface TrackState {
-  currentTrack: TypesTrack | null;
+  currentTrack: TrackType | null;
   isPlay: boolean;
   isRepeat: boolean;
   isShuffle: boolean;
-  playlist: TypesTrack[];
+  playlist: TrackType[];
   currentTime: number;
   duration: number;
   volume: number;
@@ -29,7 +29,7 @@ const trackSlice = createSlice({
   name: 'track',
   initialState,
   reducers: {
-    setCurrentTrack: (state, action: PayloadAction<TypesTrack>) => {
+    setCurrentTrack: (state, action: PayloadAction<TrackType>) => {
       state.currentTrack = action.payload;
       state.isPlay = true;
       state.currentTime = 0;
@@ -44,7 +44,7 @@ const trackSlice = createSlice({
     setIsShuffle: (state, action: PayloadAction<boolean>) => {
       state.isShuffle = action.payload;
     },
-    setPlaylist: (state, action: PayloadAction<TypesTrack[]>) => {
+    setPlaylist: (state, action: PayloadAction<TrackType[]>) => {
       state.playlist = action.payload;
     },
     setVolume: (state, action: PayloadAction<number>) => {

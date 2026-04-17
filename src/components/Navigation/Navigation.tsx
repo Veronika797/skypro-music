@@ -52,7 +52,7 @@ export default function Navigation() {
           </li>
           <li className={styles.menu__item}>
             <Link
-              href="../signin.html"
+              href="/auth/signin"
               className={styles.menu__link}
               onClick={toggleMenu}
             >

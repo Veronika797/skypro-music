@@ -1,4 +1,4 @@
-export interface TypesTrack {
+export interface TrackType {
   _id: number;
   name: string;
   author: string;
@@ -6,7 +6,13 @@ export interface TypesTrack {
   genre: string[];
   duration: number;
   album: string;
-  logo: null;
+  logo: null | string;
   track_file: string;
   stared_user: string[];
 }
+
+export type PlayListType = {
+  items: number[];
+  name: string;
+  _id: number;
+};

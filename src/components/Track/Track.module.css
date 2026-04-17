@@ -130,6 +130,7 @@
   font-size: 16px;
   line-height: 24px;
   color: #ffffff;
+  text-decoration: none;
 }
 
 .track__titleSpan {
@@ -157,6 +158,7 @@
   line-height: 24px;
   color: #ffffff;
   text-align: left;
+  text-decoration: none;
 }
 
 .track__album {
@@ -169,11 +171,12 @@
   font-size: 16px;
   line-height: 24px;
   color: #696969;
+  text-decoration: none;
 }
 
 .track__timeSvg {
-  width: 14px;
-  height: 12px;
+  width: 16px;
+  height: 13px;
   margin-right: 17px;
   fill: transparent;
   stroke: #696969;
