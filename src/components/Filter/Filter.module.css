@@ -1,50 +1,104 @@
-.content__title {
-  display: -webkit-box;
-  display: -ms-flexbox;
+.filterContainer {
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-bottom: 51px;
+  position: relative;
 }
 
-.playlistTitle__col {
+.filter__title {
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 24px;
-  letter-spacing: 2px;
-  color: #696969;
-  text-transform: uppercase;
+  margin-right: 15px;
+  color: white;
 }
 
-.col01 {
-  width: 447px;
+.filter__button {
+  display: flex;
+  gap: 10px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  border: 1px solid #ffffff;
+  border-radius: 60px;
+  padding: 6px 20px;
+  color: white;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
 }
 
-.col02 {
-  width: 321px;
+.filter__button:hover {
+  border-color: #d9b6ff;
+  color: #d9b6ff;
 }
 
-.col03 {
-  width: 245px;
+.filter__button:active,
+.filter__button.active {
+  border-color: #ad61ff;
+  color: #ad61ff;
 }
 
-.col04 {
-  width: 60px;
-  text-align: end;
+.filter__dropdown {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  margin-top: 8px;
+  background-color: #313131;
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 200px;
+  width: max-content;
+  max-width: 300px;
+  max-height: 305px;
+  z-index: 1000;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.2s ease;
 }
 
-.playlistTitle__svg {
-  width: 12px;
-  height: 12px;
-  fill: transparent;
-  stroke: #696969;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filter__list {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-height: 237px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  padding-right: 10px;
+}
+
+.filter__list::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+
+.filter__list::-webkit-scrollbar-track {
+  background-color: #121212;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-clip: content-box;
+}
+
+.filter__list::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 10px;
 }

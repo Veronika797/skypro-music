@@ -1,5 +1,189 @@
 .centerblock {
   width: auto;
+  flex-grow: 3;
+  padding: 20px 40px 20px;
+}
+
+.centerblock__h2 {
+  font-size: 64px;
+  line-height: 72px;
+  letter-spacing: -0.8px;
+  margin-bottom: 45px;
+  color: white;
+  margin-top: 0;
+}
+
+.centerblock__content {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 100px;
+  min-height: 0; /* 🔥 Важно для flex-контейнеров с прокруткой */
+}
+
+.content__playlist {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.playlist__item {
+  width: 100%;
+  margin-bottom: 12px;
+  display: flex;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.playlist__item:hover {
+  background-color: #1a1a1a;
+}
+
+.playlist__item.active {
+  background-color: #2a2a2a;
+}
+
+.playlist__header {
+  cursor: default;
+  pointer-events: none;
+  margin-bottom: 8px;
+}
+
+.playlist__track {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 0;
+}
+
+.track__title {
+  display: flex;
+  align-items: center;
+  width: 447px;
+  min-width: 0; /* 🔥 Предотвращает выход за пределы */
+}
+
+.track__titleImage {
+  width: 51px;
+  height: 51px;
+  padding: 16px;
+  background: #313131;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 17px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.playIndicator {
+  width: 8px;
+  height: 8px;
+  background-color: #b672ff;
+  border-radius: 50%;
+  position: relative;
+}
+
+.playIndicator--playing::before,
+.playIndicator--playing::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #b672ff;
+  border-radius: 50%;
+}
+
+.playIndicator--playing::before {
+  width: 8px;
+  height: 8px;
+  opacity: 0.8;
+  animation: pulseOuter 1.6s infinite ease-out;
+}
+
+@keyframes pulseOuter {
+  0% {
+    width: 8px;
+    height: 8px;
+    opacity: 0.8;
+  }
+  100% {
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+  }
+}
+
+.track__titleLink,
+.track__authorLink,
+.track__albumLink {
+  font-size: 16px;
+  line-height: 24px;
+  font-family: 'Montserrat', sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track__titleLink,
+.track__authorLink {
+  color: #ffffff;
+}
+.track__albumLink {
+  color: #696969;
+}
+
+.track__author {
+  width: 321px;
+  min-width: 0;
+}
+
+.track__album {
+  width: 245px;
+  min-width: 0;
+}
+
+.track__content {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+/* 🔥 Убраны fill/stroke, так как теперь используются <img> */
+.track__timeSvg,
+.track__titleSvg {
+  width: 18px;
+  height: 18px;
+  opacity: 0.8;
+}
+
+.track__titleText,
+.track__authorText,
+.track__albumText {
+  font-size: 12px;
+  line-height: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #696969;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.track__timeText {
+  font-size: 14px;
+  line-height: 20px;
+  color: #696969;
+  white-space: nowrap;
+}
+
+/* .centerblock {
+  width: auto;
   -webkit-box-flex: 3;
   -ms-flex-positive: 3;
   flex-grow: 3;
@@ -26,3 +210,11 @@
   flex-direction: column;
   padding-bottom: 100px;
 }
+
+.centerblockLoading {
+  color: #ffffff;
+  font-size: 16px;
+  text-align: start;
+  padding: 20px;
+  opacity: 0.8;
+} */

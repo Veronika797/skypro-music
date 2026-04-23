@@ -296,6 +296,7 @@
 
   a {
     color: #ffffff;
+    text-decoration: none;
   }
 }
 
@@ -321,6 +322,7 @@
   font-size: 13px;
   line-height: 24px;
   color: #ffffff;
+  text-decoration: none;
 }
 
 .trackPlay__like,
