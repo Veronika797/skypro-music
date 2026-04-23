@@ -1,19 +1,30 @@
 import axios from 'axios';
 import { BASE_URL } from '../constants';
-import { PlayListType, TrackType } from '../../SharedTypes/SharedTypes';
+import { PlayListType, TypesTrack } from '../../SharedTypes/SharedTypes';
 
 interface ApiResponse<T> {
   data: T;
 }
 
-export const getAllTracks = (): Promise<TrackType[]> => {
-  return axios
-    .get<ApiResponse<TrackType[]>>(BASE_URL + '/catalog/track/all/')
-    .then((res) => res.data.data);
-};
+export const getTracksSelection = async (id: string): Promise<PlayListType> => {
+  const url = `${BASE_URL}/catalog/selection/${id}/`;
 
-export const getTracksSelection = (id: string): Promise<PlayListType> => {
-  return axios
-    .get<ApiResponse<PlayListType>>(BASE_URL + `/catalog/selection/${id}/`)
-    .then((res) => res.data.data);
+  const res = await axios.get(url);
+
+  let raw = res.data;
+
+  if (raw?.success && raw?.data != null) {
+    raw = raw.data;
+  }
+
+  if (!raw || typeof raw !== 'object') {
+    return { _id: Number(id), name: 'Подборка', items: [], logo: null };
+  }
+
+  return {
+    _id: raw._id ?? Number(id),
+    name: raw.name ?? 'Подборка',
+    items: Array.isArray(raw.items) ? raw.items : [],
+    logo: raw.logo ?? null,
+  };
 };

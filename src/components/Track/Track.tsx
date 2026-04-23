@@ -14,9 +14,10 @@ import { useEffect, useRef } from 'react';
 
 interface TrackProps {
   tracks: TypesTrack[];
+  isLoading?: boolean;
 }
 
-export default function Track({ tracks }: TrackProps) {
+export default function Track({ tracks, isLoading = false }: TrackProps) {
   const dispatch = useAppDispatch();
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlaying = useAppSelector((state) => state.tracks.isPlay);
@@ -69,62 +70,73 @@ export default function Track({ tracks }: TrackProps) {
         </div>
       </div>
 
-      {tracks.map((track) => {
-        const isActive = currentTrack?._id === track._id;
-        const isActiveAndPlaying = isActive && isPlaying;
+      {isLoading ? (
+        <div
+          className={styles.centerblock__loading}
+          style={{ padding: '20px', textAlign: 'start', color: '#b3b3b3' }}
+        >
+          Загрузка треков...
+        </div>
+      ) : (
+        tracks.map((track) => {
+          const isActive = currentTrack?._id === track._id;
+          const isActiveAndPlaying = isActive && isPlaying;
 
-        return (
-          <div
-            key={track._id}
-            className={classNames(
-              styles.playlist__item,
-              isActive && styles.active,
-            )}
-            onClick={() => handleTrackClick(track)}
-            style={{ cursor: 'pointer' }}
-          >
-            <div className={styles.playlist__track}>
-              <div className={styles.track__title}>
-                <div className={styles.track__titleImage}>
-                  {isActive ? (
-                    <span
-                      className={classNames(
-                        styles.playIndicator,
-                        isActiveAndPlaying
-                          ? styles['playIndicator--playing']
-                          : styles['playIndicator--paused'],
-                      )}
-                    />
-                  ) : (
-                    <svg className={styles.track__titleSvg}>
-                      <use xlinkHref="/img/logo/note.svg"></use>
-                    </svg>
-                  )}
+          return (
+            <div
+              key={track._id}
+              className={classNames(
+                styles.playlist__item,
+                isActive && styles.active,
+              )}
+              onClick={() => handleTrackClick(track)}
+              style={{ cursor: 'pointer' }}
+            >
+              <div className={styles.playlist__track}>
+                <div className={styles.track__title}>
+                  <div className={styles.track__titleImage}>
+                    {isActive ? (
+                      <span
+                        className={classNames(
+                          styles.playIndicator,
+                          isActiveAndPlaying
+                            ? styles['playIndicator--playing']
+                            : styles['playIndicator--paused'],
+                        )}
+                      />
+                    ) : (
+                      <svg className={styles.track__titleSvg}>
+                        <use xlinkHref="/img/logo/note.svg"></use>
+                      </svg>
+                    )}
+                  </div>
+
+                  <span className={styles.track__titleLink}>{track.name}</span>
                 </div>
 
-                <span className={styles.track__titleLink}>{track.name}</span>
-              </div>
+                <div className={styles.track__author}>
+                  <span className={styles.track__authorLink}>
+                    {track.author}
+                  </span>
+                </div>
 
-              <div className={styles.track__author}>
-                <span className={styles.track__authorLink}>{track.author}</span>
-              </div>
+                <div className={styles.track__album}>
+                  <span className={styles.track__albumLink}>{track.album}</span>
+                </div>
 
-              <div className={styles.track__album}>
-                <span className={styles.track__albumLink}>{track.album}</span>
-              </div>
-
-              <div className={styles.track__content}>
-                <svg className={styles.track__timeSvg}>
-                  <use xlinkHref="/img/logo/like.svg"></use>
-                </svg>
-                <span className={styles.track__timeText}>
-                  {formatTime(track.duration_in_seconds || 0)}
-                </span>
+                <div className={styles.track__content}>
+                  <svg className={styles.track__timeSvg}>
+                    <use xlinkHref="/img/logo/like.svg"></use>
+                  </svg>
+                  <span className={styles.track__timeText}>
+                    {formatTime(track.duration_in_seconds || 0)}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })
+      )}
     </div>
   );
 }

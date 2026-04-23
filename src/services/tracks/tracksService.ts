@@ -1,40 +1,61 @@
-import { TypesTrack } from '@/SharedTypes/SharedTypes';
+import { PlayListType, TypesTrack } from '@/SharedTypes/SharedTypes';
 import { getAllTracks } from './trackApi';
+import axios from 'axios';
+import { BASE_URL } from '../constants';
+
+let cachedSelections: PlayListType[] | null = null;
 
 export const fetchTracks = async (): Promise<TypesTrack[]> => {
   try {
     const response = await getAllTracks();
-    if (Array.isArray(response)) {
-      return response;
-    }
-
-    return [];
+    return Array.isArray(response) ? response : [];
   } catch (error) {
-    console.error('Полная ошибка при получении треков:', error);
-    if (error instanceof Error) {
-      console.error('Тип ошибки:', error.name);
-      console.error('Сообщение ошибки:', error.message);
-      console.error('Стек вызовов:', error.stack);
-    }
+    console.error('Ошибка загрузки треков:', error);
     throw new Error(
       'Не удалось загрузить треки. Проверьте подключение к интернету.',
     );
   }
 };
 
-export const fetchCategoryTracks = async (
-  categoryId: string,
-): Promise<TypesTrack[]> => {
+export const fetchAllSelections = async (): Promise<PlayListType[]> => {
+  if (cachedSelections) return cachedSelections;
+
+  const res = await axios.get<{ success: boolean; data: PlayListType[] }>(
+    `${BASE_URL}/catalog/selection/all/`,
+    { timeout: 15000 },
+  );
+
+  const data = res.data?.success ? res.data.data : res.data;
+  cachedSelections = Array.isArray(data) ? data : [];
+
+  return cachedSelections;
+};
+
+export const fetchSelectionTracks = async (
+  selectionId: string,
+): Promise<{ name: string; tracks: TypesTrack[] }> => {
   try {
-    const allTracks = await fetchTracks();
-    const filteredTracks = allTracks.filter((track) =>
-      track.genre.some((g) =>
-        g.toLowerCase().includes(categoryId.toLowerCase()),
-      ),
+    const allSelections = await fetchAllSelections();
+    const playlist = allSelections.find(
+      (p) => String(p._id) === String(selectionId),
     );
-    return filteredTracks;
+
+    if (!playlist) {
+      return { name: 'Подборка', tracks: [] };
+    }
+
+    const allTracks = await getAllTracks();
+    const playlistIds = playlist.items?.map((id) => Number(id)) || [];
+    const filteredTracks = allTracks.filter((track) =>
+      playlistIds.includes(Number(track._id)),
+    );
+
+    return {
+      name: playlist.name || 'Подборка',
+      tracks: filteredTracks,
+    };
   } catch (error) {
-    console.error('Ошибка при получении треков подборки:', error);
-    throw new Error('Не удалось загрузить треки подборки.');
+    console.error('Ошибка загрузки подборки:', error);
+    throw new Error('Не удалось загрузить подборку');
   }
 };

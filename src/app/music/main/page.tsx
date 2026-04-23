@@ -5,7 +5,10 @@ import styles from './page.module.css';
 import Bar from '@bar/Bar';
 import Navigation from '@navigation/Navigation';
 import Sidebar from '@sidebar/Sidebar';
-import { fetchTracks } from '@/services/tracks/tracksService';
+import {
+  fetchAllSelections,
+  fetchTracks,
+} from '@/services/tracks/tracksService';
 import AudioPlayer from '@/components/AudioPlayer';
 import Centerblock from '@/components/Centerblock/Centerblock';
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
@@ -19,6 +22,7 @@ export default function Home() {
       try {
         const fetchedTracks = await fetchTracks();
         setTracks(fetchedTracks);
+        await fetchAllSelections();
       } catch (error) {
         console.error('Ошибка загрузки треков:', error);
       } finally {
@@ -35,7 +39,7 @@ export default function Home() {
         <main className={styles.main}>
           <Navigation />
 
-          <Centerblock tracks={tracks} loading={loading} />
+          <Centerblock tracks={tracks} loading={loading} title="Треки" />
 
           <Sidebar />
         </main>

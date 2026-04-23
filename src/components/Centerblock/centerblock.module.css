@@ -2,6 +2,14 @@
   width: auto;
   flex-grow: 3;
   padding: 20px 40px 20px;
+  background-color: #181818;
+}
+
+.centerblock__loading {
+  color: white;
+  font-size: 18px;
+  padding: 20px;
+  text-align: center;
 }
 
 .centerblock__h2 {
@@ -17,7 +25,7 @@
   display: flex;
   flex-direction: column;
   padding-bottom: 100px;
-  min-height: 0; /* 🔥 Важно для flex-контейнеров с прокруткой */
+  min-height: 0;
 }
 
 .content__playlist {
@@ -61,7 +69,7 @@
   display: flex;
   align-items: center;
   width: 447px;
-  min-width: 0; /* 🔥 Предотвращает выход за пределы */
+  min-width: 0;
 }
 
 .track__titleImage {
@@ -156,7 +164,6 @@
   color: #aaa;
 }
 
-/* 🔥 Убраны fill/stroke, так как теперь используются <img> */
 .track__timeSvg,
 .track__titleSvg {
   width: 18px;
@@ -181,40 +188,3 @@
   color: #696969;
   white-space: nowrap;
 }
-
-/* .centerblock {
-  width: auto;
-  -webkit-box-flex: 3;
-  -ms-flex-positive: 3;
-  flex-grow: 3;
-  padding: 20px 40px 20px;
-}
-
-.centerblock__h2 {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 64px;
-  line-height: 72px;
-  letter-spacing: -0.8px;
-  margin-bottom: 45px;
-  color: white;
-}
-
-.centerblock__content {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  padding-bottom: 100px;
-}
-
-.centerblockLoading {
-  color: #ffffff;
-  font-size: 16px;
-  text-align: start;
-  padding: 20px;
-  opacity: 0.8;
-} */
