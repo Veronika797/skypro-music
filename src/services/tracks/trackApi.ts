@@ -14,7 +14,6 @@ export const getAllTracks = (): Promise<TypesTrack[]> => {
     )
     .then((res) => {
       if (!res.data) {
-        console.error('API вернул пустые данные');
         return [];
       }
 
@@ -30,7 +29,6 @@ export const getAllTracks = (): Promise<TypesTrack[]> => {
       }
 
       if (Array.isArray(res.data)) {
-        console.log('Данные уже являются массивом:', res.data);
         return res.data;
       }
 
@@ -41,19 +39,14 @@ export const getAllTracks = (): Promise<TypesTrack[]> => {
       ) {
         const dataObj = res.data as { data: TypesTrack[] };
         if (Array.isArray(dataObj.data)) {
-          console.log('Извлечение треков из поля data:', dataObj.data);
           return dataObj.data;
         }
       }
 
-      console.warn('Неожиданная структура данных:', res.data);
       return [];
     })
     .catch((error) => {
-      console.error('API ошибка при загрузке треков:', error);
       if (error.response) {
-        console.error('Статус ответа:', error.response.status);
-        console.error('Данные ответа:', error.response.data);
       } else if (error.request) {
         console.error('Нет ответа от сервера:', error.request);
       } else {
@@ -67,11 +60,9 @@ export const getTracksSelection = (id: string): Promise<PlayListType> => {
   return axios
     .get<PlayListType>(BASE_URL + `/catalog/selection/${id}/`)
     .then((res) => {
-      console.log('API /catalog/selection/${id}/ response:', res);
       return res.data;
     })
     .catch((error) => {
-      console.error('API error:', error);
       throw error;
     });
 };
