@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import styles from '@navigation/navigation.module.css';
+import styles from './navigation.module.css';
 import { useState } from 'react';
 
 export default function Navigation() {
@@ -21,6 +21,7 @@ export default function Navigation() {
             className={styles.logo__image}
             src="/img/logo.png"
             alt={'logo'}
+            priority
           />
         </div>
         <div
@@ -41,7 +42,11 @@ export default function Navigation() {
       <div className={`${styles.nav__menu} ${isMenuOpen ? styles.open : ''}`}>
         <ul className={styles.menu__list}>
           <li className={styles.menu__item}>
-            <Link href="#" className={styles.menu__link} onClick={toggleMenu}>
+            <Link
+              href="/music/main"
+              className={styles.menu__link}
+              onClick={toggleMenu}
+            >
               Главное
             </Link>
           </li>
@@ -52,7 +57,7 @@ export default function Navigation() {
           </li>
           <li className={styles.menu__item}>
             <Link
-              href="../signin.html"
+              href="/auth/signin"
               className={styles.menu__link}
               onClick={toggleMenu}
             >

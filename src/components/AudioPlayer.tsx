@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import {
   setIsPlay,
   setCurrentTrack,
   setDuration,
 } from '@/store/features/trackSlice';
-import { TypesTrack } from '@/SharedTypes/SharedTypes';
+import { TypesTrack } from '../SharedTypes/SharedTypes';
 
 type AudioPlayerProps = {
   playlist: TypesTrack[];
