@@ -11,6 +11,7 @@ interface TrackState {
   duration: number;
   volume: number;
   isMuted: boolean;
+  favoriteTracks: TypesTrack[];
 }
 
 const initialState: TrackState = {
@@ -23,12 +24,31 @@ const initialState: TrackState = {
   duration: 0,
   volume: 50,
   isMuted: false,
+  favoriteTracks: [],
 };
 
 const trackSlice = createSlice({
-  name: 'track',
+  name: 'tracks',
   initialState,
   reducers: {
+    addLikedTracks: (state, action: PayloadAction<TypesTrack>) => {
+      const exists = state.favoriteTracks.some(
+        (t) => t._id === action.payload._id,
+      );
+      if (!exists) {
+        state.favoriteTracks.push(action.payload);
+      } else {
+        console.warn('⚠️ Трек уже существует');
+      }
+    },
+    removeLikedTracks: (state, action: PayloadAction<TypesTrack>) => {
+      state.favoriteTracks = state.favoriteTracks.filter(
+        (track) => track._id !== action.payload._id,
+      );
+    },
+    setFavoriteTracks: (state, action: PayloadAction<TypesTrack[]>) => {
+      state.favoriteTracks = action.payload;
+    },
     setCurrentTrack: (state, action: PayloadAction<TypesTrack>) => {
       state.currentTrack = action.payload;
       state.isPlay = true;
@@ -73,5 +93,8 @@ export const {
   toggleMute,
   setCurrentTime,
   setDuration,
+  addLikedTracks,
+  removeLikedTracks,
+  setFavoriteTracks,
 } = trackSlice.actions;
 export default trackSlice.reducer;

@@ -11,7 +11,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       <div className={styles.wrapper}>
         <div className={styles.containerEnter}>
           <div className={styles.modal__block}>
-            <form className={styles.modal__form}>{children}</form>
+            <div className={styles.modal__form}>{children}</div>
           </div>
         </div>
       </div>

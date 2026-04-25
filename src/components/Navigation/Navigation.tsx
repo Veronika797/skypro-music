@@ -3,9 +3,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from './navigation.module.css';
 import { useState } from 'react';
+import { useLogout } from '../../hooks/useLogout';
+import { useAppSelector } from '@/store/store';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const logout = useLogout();
+  const { access } = useAppSelector((state) => state.auth);
+  const isAuthenticated = !!access;
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -51,21 +56,50 @@ export default function Navigation() {
             </Link>
           </li>
           <li className={styles.menu__item}>
-            <Link href="#" className={styles.menu__link} onClick={toggleMenu}>
-              Мой плейлист
-            </Link>
-          </li>
-          <li className={styles.menu__item}>
             <Link
-              href="/auth/signin"
+              href="/music/my-playlist"
               className={styles.menu__link}
               onClick={toggleMenu}
             >
-              Войти
+              Мой плейлист
             </Link>
           </li>
+          {isAuthenticated ? (
+            <li className={styles.menu__item}>
+              <button
+                className={styles.menu__link}
+                onClick={() => {
+                  logout();
+                  toggleMenu();
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#ff4d4d',
+                  cursor: 'pointer',
+                  width: '100%',
+                  textAlign: 'left',
+                  fontSize: '16px',
+                  fontWeight: 400,
+                }}
+              >
+                Выйти
+              </button>
+            </li>
+          ) : (
+            <li className={styles.menu__item}>
+              <Link
+                href="/auth/signin"
+                className={styles.menu__link}
+                onClick={toggleMenu}
+              >
+                Войти
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
+
       {isMenuOpen && (
         <div
           className={styles.overlay}

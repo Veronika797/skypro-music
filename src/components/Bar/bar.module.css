@@ -247,6 +247,7 @@
   background-color: rgba(182, 114, 255, 1);
   opacity: 1;
 }
+
 .playIndicator--paused {
   background-color: rgba(182, 114, 255, 1);
   opacity: 1;
@@ -293,11 +294,11 @@
   grid-column: 2;
   grid-area: author;
   min-width: 49px;
+}
 
-  a {
-    color: #ffffff;
-    text-decoration: none;
-  }
+.trackPlay__author a {
+  color: #ffffff;
+  text-decoration: none;
 }
 
 .trackPlay__authorLink {
@@ -325,20 +326,74 @@
   text-decoration: none;
 }
 
-.trackPlay__like,
 .trackPlay__dislike {
+  margin-left: 28.5px;
+  display: flex;
+  align-items: center;
+}
+
+.likeBtn {
+  background: none;
+  border: none;
   padding: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.likeBtn:hover {
+  transform: scale(1.1);
+}
+
+.likeBtn:disabled {
+  cursor: wait;
+  opacity: 0.6;
+  transform: none;
 }
 
 .trackPlay__likeSvg {
-  width: 16px;
-  height: 14px;
-  fill: transparent;
-  stroke: #696969;
+  width: 18px;
+  height: 18px;
 }
 
-.trackPlay__dislike {
-  margin-left: 28.5px;
+.trackPlay__likeSvg path {
+  fill: none;
+  stroke: #696969;
+  stroke-width: 2;
+  transition:
+    fill 0.2s ease,
+    stroke 0.2s ease;
+}
+
+.likeBtn:hover .trackPlay__likeSvg path {
+  stroke: #ffffff;
+}
+
+.trackPlay__likeSvg.liked path {
+  fill: #ff4d4d;
+  stroke: #ff4d4d;
+}
+
+.likeBtn:hover .trackPlay__likeSvg.liked path {
+  fill: #ff6b6b;
+  stroke: #ff6b6b;
+}
+
+.likeSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ff4d4d;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .trackPlay__dislikeSvg {
@@ -421,13 +476,6 @@
 
 .btnIcon:active svg {
   fill: transparent;
-  stroke: #ffffff;
-  cursor: pointer;
-}
-
-.btnIcon:active .trackPlay__likeSvg,
-.btnIcon:active .trackPlay__dislikeSvg {
-  fill: #696969;
   stroke: #ffffff;
   cursor: pointer;
 }

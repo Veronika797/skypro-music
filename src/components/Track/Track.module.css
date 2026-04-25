@@ -1,7 +1,6 @@
 .content__playlist {
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
 }
 
 .playlist__track {
@@ -29,6 +28,146 @@
   align-items: center;
   justify-content: center;
   margin-right: 17px;
+}
+
+.track__likeBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+  margin-right: 12px;
+}
+
+.track__likeBtn:hover {
+  transform: scale(1.2);
+}
+
+.track__likeBtn:active:not(:disabled) {
+  animation: pulse 0.2s ease;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.track__likeBtn:disabled {
+  cursor: wait;
+  opacity: 0.5;
+  transform: none;
+}
+
+.track__likeBtn:active:not(:disabled) {
+  animation: pulse 0.2s ease;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.track__likeSvg {
+  width: 18px;
+  height: 18px;
+}
+.track__likeSvg path {
+  fill: none;
+  stroke: #696969;
+  transition:
+    fill 0.3s ease,
+    stroke 0.3s ease;
+}
+
+.track__likeBtn:hover .track__likeSvg path {
+  stroke: #ff4d4d;
+}
+
+.track__likeBtn .track__likeSvg.liked path {
+  fill: #ff4d4d;
+  stroke: #ff4d4d;
+  transform: scale(1.2);
+}
+
+.track__likeBtn:hover .track__likeSvg.liked path {
+  fill: #ff6b6b;
+  stroke: #ff6b6b;
+}
+
+.track__likeBtn:hover .track__likeSvg.liked path {
+  fill: #ff6b6b;
+  stroke: #ff6b6b;
+}
+
+.likeSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ff4d4d;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.likeError {
+  margin-left: 4px;
+  color: #ff6b6b;
+  font-size: 12px;
+  cursor: help;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+.likeError:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
 }
 
 .playIndicator {

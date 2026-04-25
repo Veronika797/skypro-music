@@ -38,9 +38,7 @@ export default function Signup() {
     setErrorMessage('');
   };
 
-  const onSubmit = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
+  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setErrorMessage('');
 
@@ -56,25 +54,53 @@ export default function Signup() {
     if (password.trim() !== repeatPassword.trim()) {
       return setErrorMessage('Пароли не совпадают');
     }
+
+    if (password.length < 8) {
+      return setErrorMessage('Пароль должен содержать минимум 8 символов');
+    }
+
     setIsLoading(true);
 
     try {
-      await registerUser({ email, username, password });
+      await registerUser({
+        username: username.trim(),
+        email: email.trim().toLowerCase(),
+        password,
+      });
+
       router.push('/auth/signin');
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response) {
-          setErrorMessage(error.response.data.message || 'Ошибка решистрации');
-        } else if (error.request) {
-          setErrorMessage('Отсутствует интернет. Попробуйте позже');
+      if (error instanceof AxiosError && error.response) {
+        const responseData = error.response.data as {
+          message?: string;
+          data?: {
+            errors?: Record<string, string | string[]>;
+          };
+        };
+
+        if (responseData?.data?.errors) {
+          const errors = responseData.data.errors;
+          const errorMessages = Object.entries(errors)
+            .map(([field, messages]) => {
+              const msgs = Array.isArray(messages) ? messages : [messages];
+              return `${field}: ${msgs.join(', ')}`;
+            })
+            .join('\n');
+
+          setErrorMessage(`Ошибка валидации:\n${errorMessages}`);
+        } else if (responseData?.message) {
+          setErrorMessage(`Ошибка: ${responseData.message}`);
+        } else {
+          setErrorMessage('Неизвестная ошибка сервера');
         }
       } else {
-        setErrorMessage('Неизвестная ошибка. Попробуйте позже');
+        setErrorMessage('Ошибка сети. Попробуйте позже');
       }
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <>
       <Link href="/music/main">
@@ -85,41 +111,51 @@ export default function Signup() {
 
       <input
         className={classNames(styles.modal__input, styles.login)}
-        type="text"
-        name="login"
+        type="email"
+        name="email"
         placeholder="Почта"
+        value={email}
         onChange={onChangeEmail}
       />
+
       <input
         className={styles.modal__input}
         type="text"
         name="username"
         placeholder="Имя пользователя"
+        value={username}
         onChange={onChangeUsername}
       />
+
       <input
         className={styles.modal__input}
         type="password"
         name="password"
         placeholder="Пароль"
+        value={password}
         onChange={onChangePassword}
       />
+
       <input
         className={styles.modal__input}
         type="password"
-        name="password"
+        name="repeatPassword"
         placeholder="Повторите пароль"
+        value={repeatPassword}
         onChange={onChangeRepeatPassword}
       />
+
       <div className={styles.errorContainer}>{errorMessage}</div>
+
       <button
         type="submit"
         disabled={isLoading}
         onClick={onSubmit}
         className={styles.modal__btnSignupEnt}
       >
-        Зарегистрироваться
+        {isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
       </button>
+
       <Link href={'/auth/signin'} className={styles.modal__btnSigninEnt}>
         Войти
       </Link>

@@ -7,6 +7,11 @@ interface ApiResponse<T> {
   data: T;
 }
 
+const getAuthHeaders = (token: string) => ({
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${token}`,
+});
+
 export const getAllTracks = (): Promise<TypesTrack[]> => {
   return axios
     .get<ApiResponse<TypesTrack[]> | TypesTrack[]>(
@@ -56,7 +61,7 @@ export const getAllTracks = (): Promise<TypesTrack[]> => {
     });
 };
 
-export const getTracksSelection = (id: string): Promise<PlayListType> => {
+export const getTracksSelection = async (id: string): Promise<PlayListType> => {
   return axios
     .get<PlayListType>(BASE_URL + `/catalog/selection/${id}/`)
     .then((res) => {
@@ -65,4 +70,27 @@ export const getTracksSelection = (id: string): Promise<PlayListType> => {
     .catch((error) => {
       throw error;
     });
+};
+
+export const addLike = async (
+  token: string,
+  trackId: number | string,
+): Promise<{ success: boolean }> => {
+  const res = await axios.post<ApiResponse<{ message: string }>>(
+    `${BASE_URL}/catalog/track/${trackId}/favorite/`,
+    {},
+    { headers: getAuthHeaders(token) },
+  );
+  return res.data;
+};
+
+export const removeLike = async (
+  token: string,
+  trackId: number | string,
+): Promise<{ success: boolean }> => {
+  const res = await axios.delete<ApiResponse<{ message: string }>>(
+    `${BASE_URL}/catalog/track/${trackId}/favorite/`,
+    { headers: getAuthHeaders(token) },
+  );
+  return res.data;
 };
