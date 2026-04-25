@@ -37,8 +37,6 @@ const trackSlice = createSlice({
       );
       if (!exists) {
         state.favoriteTracks.push(action.payload);
-      } else {
-        console.warn('⚠️ Трек уже существует');
       }
     },
     removeLikedTracks: (state, action: PayloadAction<TypesTrack>) => {

@@ -2,9 +2,10 @@ import { TypesTrack } from '@/SharedTypes/SharedTypes';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
-import { addLike, removeLike } from '@/services/tracks/tracksApi';
+
 import { withReauth } from '@/Utils/withReAuth';
 import { addLikedTracks, removeLikedTracks } from '@/store/features/trackSlice';
+import { addLike, removeLike } from '@/services/tracks/trackApi';
 
 type returnTypeHook = {
   isLoading: boolean;
@@ -26,7 +27,6 @@ export const useLikeTrack = (track: TypesTrack | null): returnTypeHook => {
 
   const toggleLike = () => {
     if (!access) {
-      console.warn('❌ Нет авторизации');
       setErrorMsg('Нет авторизации');
       setTimeout(() => setErrorMsg(null), 3000);
       return;

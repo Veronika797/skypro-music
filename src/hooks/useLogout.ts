@@ -10,8 +10,7 @@ export const useLogout = () => {
 
   const logout = () => {
     dispatch(clearUser());
-
-    router.replace('/');
+    router.replace('/auth/signin');
 
     router.refresh();
   };

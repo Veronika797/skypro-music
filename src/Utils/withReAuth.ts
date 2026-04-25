@@ -19,12 +19,10 @@ export const withReauth = async <T>(
         dispatch(setAccessToken(newAccessToken.access));
         return await apiFunction(newAccessToken.access);
       } catch (refreshError) {
-        console.error('❌ withReauth: не удалось обновить токен');
         throw refreshError;
       }
     }
 
-    console.error('❌ withReauth: другая ошибка:', error);
     throw error;
   }
 };

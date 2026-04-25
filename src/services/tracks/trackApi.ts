@@ -51,12 +51,6 @@ export const getAllTracks = (): Promise<TypesTrack[]> => {
       return [];
     })
     .catch((error) => {
-      if (error.response) {
-      } else if (error.request) {
-        console.error('Нет ответа от сервера:', error.request);
-      } else {
-        console.error('Ошибка при настройке запроса:', error.message);
-      }
       throw error;
     });
 };

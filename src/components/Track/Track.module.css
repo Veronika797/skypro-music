@@ -38,7 +38,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
+  width: 25px;
   height: 20px;
   transition: transform 0.3s ease;
   margin-right: 12px;
@@ -87,8 +87,8 @@
 }
 
 .track__likeSvg {
-  width: 18px;
-  height: 18px;
+  width: 26px;
+  height: 20px;
 }
 .track__likeSvg path {
   fill: none;

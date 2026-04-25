@@ -67,6 +67,7 @@ export default function Navigation() {
           {isAuthenticated ? (
             <li className={styles.menu__item}>
               <button
+                type="button"
                 className={styles.menu__link}
                 onClick={() => {
                   logout();

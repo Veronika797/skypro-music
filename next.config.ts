@@ -3,7 +3,7 @@ module.exports = {
     return [
       {
         source: '/',
-        destination: '/src/app/music/main',
+        destination: '/music/main',
         permanent: true,
       },
     ];

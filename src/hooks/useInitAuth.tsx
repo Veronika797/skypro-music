@@ -26,7 +26,6 @@ const scheduleTokenRefresh = (
       dispatch(setRefreshToken(newTokens.refresh));
       scheduleTokenRefresh(newTokens.refresh, dispatch);
     } catch (error) {
-      console.error('Авто-обновление токена не удалось:', error);
       if (error instanceof AxiosError && error.response?.status === 401) {
         dispatch(clearUser());
       }
@@ -76,10 +75,10 @@ export const useInitAuth = () => {
         try {
           const parsed = JSON.parse(storedFavorites);
           if (Array.isArray(parsed)) {
-            dispatch(setFavoriteTracks(parsed));
+            dispatch({ type: 'tracks/setFavoriteTracks', payload: parsed });
           }
-        } catch {
-          console.error('Ошибка парсинга избранных треков');
+        } catch (e) {
+          console.error('Ошибка загрузки лайков:', e);
           localStorage.removeItem('favoriteTracks');
         }
       }
