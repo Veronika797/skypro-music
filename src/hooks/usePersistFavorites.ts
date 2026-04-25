@@ -7,8 +7,14 @@ export const usePersistFavorites = () => {
   const favoriteTracks = useAppSelector((state) => state.tracks.favoriteTracks);
 
   useEffect(() => {
-    if (favoriteTracks.length >= 0) {
-      localStorage.setItem('favoriteTracks', JSON.stringify(favoriteTracks));
+    const stored = localStorage.getItem('favoriteTracks');
+
+    if (favoriteTracks.length === 0) {
+      if (stored && stored !== '[]') {
+        return;
+      }
     }
+
+    localStorage.setItem('favoriteTracks', JSON.stringify(favoriteTracks));
   }, [favoriteTracks]);
 };

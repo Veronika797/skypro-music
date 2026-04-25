@@ -1,9 +1,6 @@
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { AxiosError } from 'axios';
 import { useState } from 'react';
-
-import { withReauth } from '@/Utils/withReAuth';
 import { addLikedTracks, removeLikedTracks } from '@/store/features/trackSlice';
 import { addLike, removeLike } from '@/services/tracks/trackApi';
 
@@ -14,7 +11,7 @@ type returnTypeHook = {
   isLike: boolean;
 };
 
-export const useLikeTrack = (track: TypesTrack | null): returnTypeHook => {
+export const useLikeTrack = (track: TypesTrack | null) => {
   const { favoriteTracks } = useAppSelector((state) => state.tracks);
   const { access, refresh } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
@@ -40,30 +37,6 @@ export const useLikeTrack = (track: TypesTrack | null): returnTypeHook => {
 
     if (track) {
       dispatch(actionSlice(track));
-
-      withReauth(
-        (newToken) => actionApi(newToken || access, String(track._id)),
-        refresh,
-        dispatch,
-      )
-        .catch((error) => {
-          const rollbackAction = isLike ? addLikedTracks : removeLikedTracks;
-          dispatch(rollbackAction(track));
-
-          if (error instanceof AxiosError) {
-            if (error.response) {
-              setErrorMsg(error.response.data?.message || 'Ошибка сервера');
-            } else if (error.request) {
-              setErrorMsg('Нет соединения с сервером');
-            } else {
-              setErrorMsg('Неизвестная ошибка');
-            }
-            setTimeout(() => setErrorMsg(null), 4000);
-          }
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
     }
   };
 

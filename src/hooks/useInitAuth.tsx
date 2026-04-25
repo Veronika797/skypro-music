@@ -8,9 +8,9 @@ import {
   setUsername,
   clearUser,
 } from '@/store/features/authSlice';
+import { setFavoriteTracks } from '@/store/features/trackSlice';
 import { refreshToken as refreshApi } from '@/services/auth/authApi';
 import { AxiosError } from 'axios';
-import { setFavoriteTracks } from '@/store/features/trackSlice';
 
 const scheduleTokenRefresh = (
   refreshTokenValue: string,
@@ -71,14 +71,15 @@ export const useInitAuth = () => {
       }
 
       const storedFavorites = localStorage.getItem('favoriteTracks');
+
       if (storedFavorites) {
         try {
           const parsed = JSON.parse(storedFavorites);
-          if (Array.isArray(parsed)) {
-            dispatch({ type: 'tracks/setFavoriteTracks', payload: parsed });
+
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            dispatch(setFavoriteTracks(parsed));
           }
         } catch (e) {
-          console.error('Ошибка загрузки лайков:', e);
           localStorage.removeItem('favoriteTracks');
         }
       }
