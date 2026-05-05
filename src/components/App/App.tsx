@@ -44,9 +44,7 @@ export default function App() {
 
   useEffect(() => {
     if (audioRef.current && isPlaying) {
-      audioRef.current
-        .play()
-        .catch((e) => console.error('Autoplay failed:', e));
+      audioRef.current.play().catch(() => {});
     }
   }, [isPlaying]);
 

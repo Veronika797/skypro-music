@@ -33,7 +33,6 @@ export default function MyPlaylistPage() {
           : [];
       dispatch(setFavoriteTracks(tracks));
     } catch (err: unknown) {
-      console.error('Ошибка загрузки избранного:', err);
       if (err instanceof AxiosError && err.response?.status === 401) {
         setError('Сессия истекла. Пожалуйста, войдите заново.');
       }

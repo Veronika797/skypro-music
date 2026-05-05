@@ -38,8 +38,6 @@ export const useLikeTrack = (track: TypesTrack | null) => {
         dispatch(addLikedTracks(track));
       }
     } catch (error: unknown) {
-      console.error('Ошибка сервера при изменении лайка:', error);
-
       if (error instanceof AxiosError) {
         if (error.response?.status === 401) {
           setErrorMsg('Сессия истекла. Пожалуйста, войдите снова.');

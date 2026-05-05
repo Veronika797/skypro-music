@@ -9,7 +9,7 @@ import { useLogout } from '@hooks/useLogout';
 
 export default function Sidebar() {
   const router = useRouter();
-  const { username, access } = useAppSelector((state) => state.auth);
+  const { username } = useAppSelector((state) => state.auth);
   const logout = useLogout();
 
   const handlePlaylistClick = (e: React.MouseEvent, id: string) => {
@@ -39,20 +39,6 @@ export default function Sidebar() {
 
       <div className={styles.sidebar__block}>
         <div className={styles.sidebar__list}>
-          {access && (
-            <div className={styles.sidebar__item}>
-              {/* <Link href="/music/my-playlist" className={styles.sidebar__link}>
-                <Image
-                  className={styles.sidebar__img}
-                  src=""
-                  alt="Мой плейлист"
-                  width={250}
-                  height={170}
-                />
-              </Link> */}
-            </div>
-          )}
-
           {[
             { _id: '2', src: '/img/playlist01.png', alt: 'playlist 1' },
             { _id: '3', src: '/img/playlist02.png', alt: 'playlist 2' },
