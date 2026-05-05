@@ -63,9 +63,15 @@ export function TrackItem({
             className={styles.track__likeBtn}
             onClick={(e) => {
               e.stopPropagation();
+              if (!access || access === '') return;
               toggleLike();
             }}
             disabled={!access || isLiking}
+            style={{
+              cursor: !access ? 'not-allowed' : 'pointer',
+              opacity: !access ? 0.4 : 1,
+              pointerEvents: !access ? 'none' : 'auto',
+            }}
             title={
               !access
                 ? 'Войдите в аккаунт, чтобы ставить лайки'
@@ -73,10 +79,6 @@ export function TrackItem({
                   ? 'Убрать из избранного'
                   : 'Добавить в избранное'
             }
-            style={{
-              cursor: !access ? 'not-allowed' : 'pointer',
-              opacity: !access ? 0.5 : 1,
-            }}
           >
             {isLiking ? (
               <span className={styles.likeSpinner} />
