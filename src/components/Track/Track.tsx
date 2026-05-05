@@ -2,15 +2,15 @@
 
 import styles from './Track.module.css';
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
-import { useAppDispatch, useAppSelector } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@store/store';
 import {
   setCurrentTrack,
   setIsPlay,
   setPlaylist,
-} from '@/store/features/trackSlice';
+} from '@store/features/trackSlice';
 import classNames from 'classnames';
 import { useEffect, useRef } from 'react';
-import { TrackItem } from './TrackItem';
+import { TrackItem } from '@components/Track/TrackItem';
 
 interface TrackProps {
   tracks: TypesTrack[];

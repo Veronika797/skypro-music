@@ -5,15 +5,15 @@ import Link from 'next/link';
 import styles from './styles.module.css';
 import Image from 'next/image';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { getToken } from '@/services/auth/authApi';
+import { getToken } from '@services/auth/authApi';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import { useAppDispatch } from '@/store/store';
+import { useAppDispatch } from '@store/store';
 import {
   setAccessToken,
   setRefreshToken,
   setUsername,
-} from '@/store/features/authSlice';
+} from '@store/features/authSlice';
 
 export default function Signin() {
   const dispatch = useAppDispatch();
@@ -50,6 +50,10 @@ export default function Signin() {
       dispatch(setUsername(email));
       dispatch(setAccessToken(tokens.access));
       dispatch(setRefreshToken(tokens.refresh));
+
+      // localStorage.setItem('access', tokens.access);
+      // localStorage.setItem('refresh', tokens.refresh);
+      // localStorage.setItem('username', email);
 
       router.replace('/music/main');
     } catch (error: unknown) {

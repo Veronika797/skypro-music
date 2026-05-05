@@ -1,11 +1,11 @@
 'use client';
 import styles from './centerblock.module.css';
-import Search from '@search/Search';
-import Track from '@track/Track';
-import Filter from '@filter/Filter';
+import Search from '@components/Search/Search';
+import Track from '@components/Track/Track';
+import Filter from '@components/Filter/Filter';
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
 import { useState, useMemo, useEffect } from 'react';
-import { fetchTracks } from '@/services/tracks/tracksService';
+import { fetchTracks } from '@services/tracks/tracksService';
 
 type FilterType = 'author' | 'year' | 'genre';
 

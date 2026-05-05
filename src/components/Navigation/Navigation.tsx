@@ -1,10 +1,11 @@
 'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './navigation.module.css';
 import { useState } from 'react';
-import { useLogout } from '../../hooks/useLogout';
-import { useAppSelector } from '@/store/store';
+import { useLogout } from '@hooks/useLogout';
+import { useAppSelector } from '@store/store';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,7 +26,7 @@ export default function Navigation() {
             height={170}
             className={styles.logo__image}
             src="/img/logo.png"
-            alt={'logo'}
+            alt="logo"
             priority
           />
         </div>
@@ -55,15 +56,19 @@ export default function Navigation() {
               Главное
             </Link>
           </li>
-          <li className={styles.menu__item}>
-            <Link
-              href="/music/my-playlist"
-              className={styles.menu__link}
-              onClick={toggleMenu}
-            >
-              Мой плейлист
-            </Link>
-          </li>
+
+          {isAuthenticated && (
+            <li className={styles.menu__item}>
+              <Link
+                href="/music/my-playlist"
+                className={styles.menu__link}
+                onClick={toggleMenu}
+              >
+                Мой плейлист
+              </Link>
+            </li>
+          )}
+
           {isAuthenticated ? (
             <li className={styles.menu__item}>
               <button

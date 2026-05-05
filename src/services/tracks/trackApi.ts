@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { BASE_URL } from '../constants';
-import { PlayListType, TypesTrack } from '../../SharedTypes/SharedTypes';
+import { BASE_URL } from '@services/constants';
+import { PlayListType, TypesTrack } from '@/SharedTypes/SharedTypes';
 
 interface ApiResponse<T> {
   success: boolean;
@@ -64,6 +64,15 @@ export const getTracksSelection = async (id: string): Promise<PlayListType> => {
     .catch((error) => {
       throw error;
     });
+};
+
+export const fetchFavoriteTracks = async (token: string) => {
+  const res = await axios.get(`${BASE_URL}/catalog/track/favorite/all/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data?.data || res.data;
 };
 
 export const addLike = async (

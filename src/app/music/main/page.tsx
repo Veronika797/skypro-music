@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Centerblock from '@centerblock/Centerblock';
-import { fetchTracks } from '@/services/tracks/tracksService';
+import Centerblock from '@components/Centerblock/Centerblock';
+import { fetchTracks } from '@services/tracks/tracksService';
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
 
 export default function MusicMainPage() {
@@ -13,9 +13,9 @@ export default function MusicMainPage() {
     const loadTracks = async () => {
       try {
         const data = await fetchTracks();
-        setTracks(data);
+        setTracks(Array.isArray(data) ? data : []);
       } catch (error) {
-        console.error('Ошибка:', error);
+        console.error('Ошибка загрузки треков:', error);
       } finally {
         setLoading(false);
       }

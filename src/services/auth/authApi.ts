@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from '../constants';
+import { BASE_URL } from '@/services/constants';
 import { AxiosError } from 'axios';
 
 type authUserProps = {
@@ -116,10 +116,12 @@ export const getToken = (
 
 export const refreshToken = (data: refreshTokenProps): Promise<tokensType> => {
   return axios
-    .post<ApiResponse<tokensType>>(BASE_URL + '/user/token/refresh/', data, {
+    .post<tokensType>(BASE_URL + '/user/token/refresh/', data, {
       headers: {
         'content-type': 'application/json',
       },
     })
-    .then((res) => res.data.data);
+    .then((res) => {
+      return res.data;
+    });
 };

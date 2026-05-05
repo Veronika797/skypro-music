@@ -1,7 +1,7 @@
 'use client';
 
-import { useInitAuth } from '../hooks/useInitAuth';
-import { usePersistFavorites } from '../hooks/usePersistFavorites';
+import { useInitAuth } from '@hooks/useInitAuth';
+import { useMigrateLikesOnAuth } from '@hooks/useMigrateLikesOnAuth';
 
 export default function InitProvider({
   children,
@@ -9,6 +9,6 @@ export default function InitProvider({
   children: React.ReactNode;
 }) {
   useInitAuth();
-  usePersistFavorites();
+  useMigrateLikesOnAuth();
   return <>{children}</>;
 }

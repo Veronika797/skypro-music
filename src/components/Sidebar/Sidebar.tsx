@@ -1,14 +1,15 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import styles from '@sidebar/sidebar.module.css';
-import { useAppSelector } from '@/store/store';
-import { useLogout } from '@/hooks/useLogout';
 import Link from 'next/link';
+import styles from './sidebar.module.css';
+import { useAppSelector } from '@store/store';
+import { useLogout } from '@hooks/useLogout';
 
 export default function Sidebar() {
   const router = useRouter();
-  const { username } = useAppSelector((state) => state.auth);
+  const { username, access } = useAppSelector((state) => state.auth);
   const logout = useLogout();
 
   const handlePlaylistClick = (e: React.MouseEvent, id: string) => {
@@ -22,7 +23,7 @@ export default function Sidebar() {
         <p className={styles.sidebar__personalName}>{username || 'Гость'}</p>
 
         <Link
-          href="/"
+          href="/auth/signin"
           onClick={(e) => {
             e.preventDefault();
             logout();
@@ -38,6 +39,20 @@ export default function Sidebar() {
 
       <div className={styles.sidebar__block}>
         <div className={styles.sidebar__list}>
+          {access && (
+            <div className={styles.sidebar__item}>
+              {/* <Link href="/music/my-playlist" className={styles.sidebar__link}>
+                <Image
+                  className={styles.sidebar__img}
+                  src=""
+                  alt="Мой плейлист"
+                  width={250}
+                  height={170}
+                />
+              </Link> */}
+            </div>
+          )}
+
           {[
             { _id: '2', src: '/img/playlist01.png', alt: 'playlist 1' },
             { _id: '3', src: '/img/playlist02.png', alt: 'playlist 2' },

@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import styles from './layout.module.css';
-import Bar from '@bar/Bar';
-import Navigation from '@navigation/Navigation';
-import Sidebar from '@sidebar/Sidebar';
-import AudioPlayer from '@/components/AudioPlayer';
+import Bar from '@components/Bar/Bar';
+import Navigation from '@components/Navigation/Navigation';
+import Sidebar from '@components/Sidebar/Sidebar';
+import AudioPlayer from '@components/AudioPlayer';
 import {
   fetchAllSelections,
   fetchTracks,
-} from '@/services/tracks/tracksService';
+} from '@services/tracks/tracksService';
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
 
 export default function MusicLayout({

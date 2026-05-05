@@ -1,42 +1,60 @@
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
-import { useAppDispatch, useAppSelector } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@store/store';
 import { useState } from 'react';
-import { addLikedTracks, removeLikedTracks } from '@/store/features/trackSlice';
-import { addLike, removeLike } from '@/services/tracks/trackApi';
-
-type returnTypeHook = {
-  isLoading: boolean;
-  errorMsg: string | null;
-  toggleLike: () => void;
-  isLike: boolean;
-};
+import { addLikedTracks, removeLikedTracks } from '@store/features/trackSlice';
+import { addLike, removeLike } from '@services/tracks/trackApi';
+import { AxiosError } from 'axios';
 
 export const useLikeTrack = (track: TypesTrack | null) => {
   const { favoriteTracks } = useAppSelector((state) => state.tracks);
-  const { access, refresh } = useAppSelector((state) => state.auth);
+  const { access } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const isLike = favoriteTracks.some(
     (t) => String(t._id) === String(track?._id),
   );
+
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const toggleLike = () => {
+  const toggleLike = async () => {
     if (!access) {
-      setErrorMsg('Нет авторизации');
+      setErrorMsg('Войдите в аккаунт, чтобы ставить лайки');
       setTimeout(() => setErrorMsg(null), 3000);
       return;
     }
 
-    const actionApi = isLike ? removeLike : addLike;
-    const actionSlice = isLike ? removeLikedTracks : addLikedTracks;
+    if (!track) return;
 
     setIsLoading(true);
     setErrorMsg(null);
 
-    if (track) {
-      dispatch(actionSlice(track));
+    try {
+      if (isLike) {
+        await removeLike(access, track._id);
+        dispatch(removeLikedTracks(track));
+      } else {
+        await addLike(access, track._id);
+        dispatch(addLikedTracks(track));
+      }
+    } catch (error: unknown) {
+      console.error('Ошибка сервера при изменении лайка:', error);
+
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          setErrorMsg('Сессия истекла. Пожалуйста, войдите снова.');
+        } else {
+          const msg =
+            error.response?.data?.message ||
+            error.response?.data?.detail ||
+            'Не удалось обновить лайк';
+          setErrorMsg(msg);
+        }
+      } else {
+        setErrorMsg('Произошла неизвестная ошибка');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 

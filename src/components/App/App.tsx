@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
-import ProgressBar from '../ProgressBar/ProgressBar';
+import ProgressBar from '@components/ProgressBar/ProgressBar';
 import styles from './App.module.css';
-import { formatTime } from '@/Utils/helper';
+import { formatTime } from '@utils/helper';
 
 const currentTrack = 'https://path-to-your-audio-file.mp3';
 

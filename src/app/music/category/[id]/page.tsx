@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import Centerblock from '@centerblock/Centerblock';
-import { fetchTracks } from '@/services/tracks/tracksService';
+import Centerblock from '@components/Centerblock/Centerblock';
+import { fetchTracks } from '@services/tracks/tracksService';
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
 
 const PLAYLIST_NAMES: Record<string, string> = {

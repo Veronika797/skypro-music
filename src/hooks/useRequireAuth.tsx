@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAppSelector } from '@/store/store';
+import { useAppSelector } from '@store/store';
 
 export const useRequireAuth = (redirectUrl = '/auth/signin') => {
   const { access } = useAppSelector((state) => state.auth);

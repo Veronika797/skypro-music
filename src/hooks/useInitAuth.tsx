@@ -1,15 +1,15 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useAppDispatch } from '@/store/store';
+import { useAppDispatch } from '@store/store';
 import {
   setAccessToken,
   setRefreshToken,
   setUsername,
   clearUser,
-} from '@/store/features/authSlice';
-import { setFavoriteTracks } from '@/store/features/trackSlice';
-import { refreshToken as refreshApi } from '@/services/auth/authApi';
+} from '@store/features/authSlice';
+import { setFavoriteTracks } from '@store/features/trackSlice';
+import { refreshToken as refreshApi } from '@services/auth/authApi';
 import { AxiosError } from 'axios';
 
 const scheduleTokenRefresh = (
@@ -22,12 +22,21 @@ const scheduleTokenRefresh = (
   setTimeout(async () => {
     try {
       const newTokens = await refreshApi({ refresh: refreshTokenValue });
-      dispatch(setAccessToken(newTokens.access));
-      dispatch(setRefreshToken(newTokens.refresh));
-      scheduleTokenRefresh(newTokens.refresh, dispatch);
+
+      if (newTokens?.access) {
+        dispatch(setAccessToken(newTokens.access));
+        if (newTokens.refresh) {
+          dispatch(setRefreshToken(newTokens.refresh));
+          localStorage.setItem('refresh', newTokens.refresh);
+        }
+        scheduleTokenRefresh(newTokens.refresh || refreshTokenValue, dispatch);
+      }
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 401) {
         dispatch(clearUser());
+        localStorage.removeItem('access');
+        localStorage.removeItem('refresh');
+        localStorage.removeItem('username');
       }
     }
   }, TOKEN_LIFETIME - REFRESH_LEEWAY);
@@ -55,10 +64,12 @@ export const useInitAuth = () => {
       if (storedRefresh && !storedAccess) {
         try {
           const newTokens = await refreshApi({ refresh: storedRefresh });
-          dispatch(setAccessToken(newTokens.access));
-          dispatch(setRefreshToken(newTokens.refresh));
+
+          if (newTokens?.access) {
+            dispatch(setAccessToken(newTokens.access));
+            localStorage.setItem('access', newTokens.access);
+          }
         } catch (error) {
-          console.warn('Не удалось обновить токен, выход из системы', error);
           dispatch(clearUser());
           localStorage.removeItem('access');
           localStorage.removeItem('refresh');
@@ -71,11 +82,9 @@ export const useInitAuth = () => {
       }
 
       const storedFavorites = localStorage.getItem('favoriteTracks');
-
-      if (storedFavorites) {
+      if (storedFavorites && storedFavorites !== '[]') {
         try {
           const parsed = JSON.parse(storedFavorites);
-
           if (Array.isArray(parsed) && parsed.length > 0) {
             dispatch(setFavoriteTracks(parsed));
           }

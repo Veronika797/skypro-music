@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
-import { registerUser } from '@/services/auth/authApi';
+import { registerUser } from '@services/auth/authApi';
 
 export default function Signup() {
   const [username, setUsername] = useState('');

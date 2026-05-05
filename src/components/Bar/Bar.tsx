@@ -1,10 +1,10 @@
 'use client';
 
 import classNames from 'classnames';
-import styles from '@bar/bar.module.css';
+import styles from './bar.module.css';
 import Link from 'next/link';
-import { useAppDispatch, useAppSelector } from '@/store/store';
-import { useLikeTrack } from '@/hooks/useLikeTracks';
+import { useAppDispatch, useAppSelector } from '@store/store';
+import { useLikeTrack } from '@hooks/useLikeTracks';
 import {
   setCurrentTrack,
   setIsPlay,
@@ -13,7 +13,7 @@ import {
   setVolume,
   toggleMute as toggleMuteAction,
   setCurrentTime,
-} from '@/store/features/trackSlice';
+} from '@store/features/trackSlice';
 import { useState, useRef, useEffect, useCallback } from 'react';
 
 export default function Bar() {
