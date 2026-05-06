@@ -69,19 +69,6 @@ export default function Filter({
     });
   };
 
-  const toggleAuthor = (authorName: string) => {
-    const isSelected = currentFilter.author.includes(authorName);
-    let newAuthors: string[];
-
-    if (isSelected) {
-      newAuthors = currentFilter.author.filter((a) => a !== authorName);
-    } else {
-      newAuthors = [...currentFilter.author, authorName];
-    }
-
-    onFilterChange('author', newAuthors);
-  };
-
   const getFilterItems = () => {
     if (!activeDropdown) return null;
 
@@ -101,13 +88,18 @@ export default function Filter({
 
     if (activeDropdown === 'author') {
       return authors.map((item) => {
-        const isActive = currentFilter.author.includes(item);
+        const isSelected = currentFilter.author.includes(item);
         return (
           <FilterItem
             key={item}
             text={item}
-            isActive={isActive}
-            onClick={() => toggleAuthor(item)}
+            isActive={isSelected}
+            onClick={() => {
+              const newAuthors = isSelected
+                ? currentFilter.author.filter((a) => a !== item)
+                : [...currentFilter.author, item];
+              onFilterChange('author', newAuthors);
+            }}
           />
         );
       });
@@ -121,9 +113,7 @@ export default function Filter({
             key={item}
             text={item}
             isActive={isActive}
-            onClick={() => {
-              onFilterChange('genre', isActive ? null : item);
-            }}
+            onClick={() => onFilterChange('genre', isActive ? null : item)}
           />
         );
       });
@@ -179,7 +169,9 @@ export default function Filter({
           className={styles.filter__dropdown}
           style={{ left: `${dropdownLeft}px` }}
         >
-          <div className={styles.filter__list}>{getFilterItems()}</div>
+          <div className={styles.filter__list} data-testid="filter-list">
+            {getFilterItems()}
+          </div>
         </div>
       )}
     </div>

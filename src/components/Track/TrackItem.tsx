@@ -24,9 +24,16 @@ export function TrackItem({
   const { isLike, toggleLike, isLoading: isLiking } = useLikeTrack(track);
   const isActiveAndPlaying = isActive && isPlaying;
 
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleLike();
+  };
+
   return (
     <div
-      className={classNames(styles.playlist__item, isActive && styles.active)}
+      className={classNames(styles.playlist__item, {
+        [styles.active]: isActive,
+      })}
       onClick={onClick}
     >
       <div className={styles.playlist__track}>
@@ -40,6 +47,7 @@ export function TrackItem({
                     ? styles['playIndicator--playing']
                     : styles['playIndicator--paused'],
                 )}
+                data-testid="play-indicator"
               />
             ) : (
               <svg className={styles.track__titleSvg}>
@@ -61,16 +69,15 @@ export function TrackItem({
         <div className={styles.track__content}>
           <button
             className={styles.track__likeBtn}
-            onClick={(e) => {
-              e.stopPropagation();
-              if (!access || access === '') return;
-              toggleLike();
-            }}
+            onClick={handleLikeClick}
+            aria-label={
+              isLike ? 'Убрать из избранного' : 'Добавить в избранное'
+            }
             disabled={!access || isLiking}
+            data-testid="like-button"
             style={{
               cursor: !access ? 'not-allowed' : 'pointer',
               opacity: !access ? 0.4 : 1,
-              pointerEvents: !access ? 'none' : 'auto',
             }}
             title={
               !access
