@@ -5,7 +5,6 @@ export function formatTime(time: number): string {
   const minutes = Math.floor(time / 60);
   const inputSecond = Math.floor(time % 60);
   const outputSecond = inputSecond < 10 ? `0${inputSecond}` : `${inputSecond}`;
-  // const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
   return `${minutes}:${outputSecond}`;
 }
 

@@ -1,0 +1,23 @@
+'use client';
+
+import { useAppDispatch } from '@store/store';
+import { clearUser } from '@store/features/authSlice';
+import { useRouter } from 'next/navigation';
+
+export const useLogout = () => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const logout = () => {
+    dispatch(clearUser());
+    localStorage.removeItem('access');
+    localStorage.removeItem('refresh');
+    localStorage.removeItem('username');
+
+    router.replace('/music/main');
+
+    router.refresh();
+  };
+
+  return logout;
+};

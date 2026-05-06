@@ -1,11 +1,11 @@
 'use client';
 
-import { getUniqueValuesByKey, getUniqueYears } from '../../Utils/helper';
+import { getUniqueValuesByKey, getUniqueYears } from '@utils/helper';
 import styles from './Filter.module.css';
 import classNames from 'classnames';
 import { useMemo, useRef, useState } from 'react';
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
-import FilterItem from '../FilterItem/FilterItem';
+import FilterItem from '@components/FilterItem/FilterItem';
 
 type FilterType = 'author' | 'year' | 'genre';
 

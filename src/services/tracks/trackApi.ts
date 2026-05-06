@@ -1,11 +1,16 @@
 import axios from 'axios';
-import { BASE_URL } from '../constants';
-import { PlayListType, TypesTrack } from '../../SharedTypes/SharedTypes';
+import { BASE_URL } from '@services/constants';
+import { PlayListType, TypesTrack } from '@/SharedTypes/SharedTypes';
 
 interface ApiResponse<T> {
   success: boolean;
   data: T;
 }
+
+const getAuthHeaders = (token: string) => ({
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${token}`,
+});
 
 export const getAllTracks = (): Promise<TypesTrack[]> => {
   return axios
@@ -46,17 +51,11 @@ export const getAllTracks = (): Promise<TypesTrack[]> => {
       return [];
     })
     .catch((error) => {
-      if (error.response) {
-      } else if (error.request) {
-        console.error('Нет ответа от сервера:', error.request);
-      } else {
-        console.error('Ошибка при настройке запроса:', error.message);
-      }
       throw error;
     });
 };
 
-export const getTracksSelection = (id: string): Promise<PlayListType> => {
+export const getTracksSelection = async (id: string): Promise<PlayListType> => {
   return axios
     .get<PlayListType>(BASE_URL + `/catalog/selection/${id}/`)
     .then((res) => {
@@ -65,4 +64,36 @@ export const getTracksSelection = (id: string): Promise<PlayListType> => {
     .catch((error) => {
       throw error;
     });
+};
+
+export const fetchFavoriteTracks = async (token: string) => {
+  const res = await axios.get(`${BASE_URL}/catalog/track/favorite/all/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data?.data || res.data;
+};
+
+export const addLike = async (
+  token: string,
+  trackId: number | string,
+): Promise<{ success: boolean }> => {
+  const res = await axios.post<ApiResponse<{ message: string }>>(
+    `${BASE_URL}/catalog/track/${trackId}/favorite/`,
+    {},
+    { headers: getAuthHeaders(token) },
+  );
+  return res.data;
+};
+
+export const removeLike = async (
+  token: string,
+  trackId: number | string,
+): Promise<{ success: boolean }> => {
+  const res = await axios.delete<ApiResponse<{ message: string }>>(
+    `${BASE_URL}/catalog/track/${trackId}/favorite/`,
+    { headers: getAuthHeaders(token) },
+  );
+  return res.data;
 };

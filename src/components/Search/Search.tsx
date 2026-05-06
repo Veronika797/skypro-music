@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import styles from '@search/Search.module.css';
+import styles from './Search.module.css';
 
 export default function Search() {
   const [searchInput, setSearchInput] = useState('');

@@ -1,7 +1,7 @@
 import { PlayListType, TypesTrack } from '@/SharedTypes/SharedTypes';
-import { getAllTracks } from './trackApi';
+import { getAllTracks } from '@services/tracks/trackApi';
 import axios from 'axios';
-import { BASE_URL } from '../constants';
+import { BASE_URL } from '@services/constants';
 
 let cachedSelections: PlayListType[] | null = null;
 

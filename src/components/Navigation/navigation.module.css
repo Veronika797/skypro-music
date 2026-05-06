@@ -84,6 +84,24 @@
   list-style-type: none;
 }
 
+.menu__logoutBtn {
+  background: none;
+  border: none;
+  color: #ff4d4d;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 8px 0;
+  transition: color 0.2s ease;
+}
+
+.menu__logoutBtn:hover {
+  color: #ff6b6b;
+  text-decoration: underline;
+}
+
 .menu__link {
   color: #ffffff;
   font-weight: 400;

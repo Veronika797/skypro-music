@@ -1,10 +1,16 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import styles from '@sidebar/sidebar.module.css';
+import Link from 'next/link';
+import styles from './sidebar.module.css';
+import { useAppSelector } from '@store/store';
+import { useLogout } from '@hooks/useLogout';
 
 export default function Sidebar() {
   const router = useRouter();
+  const { username } = useAppSelector((state) => state.auth);
+  const logout = useLogout();
 
   const handlePlaylistClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
@@ -14,13 +20,23 @@ export default function Sidebar() {
   return (
     <div className={styles.main__sidebar}>
       <div className={styles.sidebar__personal}>
-        <p className={styles.sidebar__personalName}>Sergey.Ivanov</p>
-        <div className={styles.sidebar__icon}>
+        <p className={styles.sidebar__personalName}>{username || 'Гость'}</p>
+
+        <Link
+          href="/auth/signin"
+          onClick={(e) => {
+            e.preventDefault();
+            logout();
+          }}
+          className={styles.sidebar__icon}
+          title="Выйти"
+        >
           <svg width="20" height="20">
             <use xlinkHref="/img/logo/logout.svg"></use>
           </svg>
-        </div>
+        </Link>
       </div>
+
       <div className={styles.sidebar__block}>
         <div className={styles.sidebar__list}>
           {[

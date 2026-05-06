@@ -1,9 +1,10 @@
 'use client';
 
 import classNames from 'classnames';
-import styles from '@bar/bar.module.css';
+import styles from './bar.module.css';
 import Link from 'next/link';
-import { useAppDispatch, useAppSelector } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@store/store';
+import { useLikeTrack } from '@hooks/useLikeTracks';
 import {
   setCurrentTrack,
   setIsPlay,
@@ -12,24 +13,21 @@ import {
   setVolume,
   toggleMute as toggleMuteAction,
   setCurrentTime,
-} from '@/store/features/trackSlice';
-import { useState, useRef, useEffect } from 'react';
+} from '@store/features/trackSlice';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 export default function Bar() {
-  const [isLiked, setIsLiked] = useState(false);
+  const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
+  const { isLike, toggleLike, isLoading } = useLikeTrack(currentTrack);
   const volume = useAppSelector((state) => state.tracks.volume);
   const isMuted = useAppSelector((state) => state.tracks.isMuted);
-
   const currentTime = useAppSelector((state) => state.tracks.currentTime);
   const duration = useAppSelector((state) => state.tracks.duration);
-
   const isRepeat = useAppSelector((state) => state.tracks.isRepeat);
   const isShuffle = useAppSelector((state) => state.tracks.isShuffle);
   const playlist = useAppSelector((state) => state.tracks.playlist);
-  const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlaying = useAppSelector((state) => state.tracks.isPlay);
   const dispatch = useAppDispatch();
-
   const progressContainerRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -68,7 +66,7 @@ export default function Bar() {
     dispatch(setIsPlay(true));
   };
 
-  const handleNextTrack = () => {
+  const handleNextTrack = useCallback(() => {
     if (!playlist.length || !currentTrack) return;
 
     if (isRepeat) {
@@ -89,9 +87,8 @@ export default function Bar() {
       dispatch(setCurrentTrack(playlist[nextIndex]));
       dispatch(setIsPlay(true));
     }
-  };
+  }, [playlist, currentTrack, isRepeat, isShuffle, dispatch]);
 
-  const toggleLike = () => setIsLiked(!isLiked);
   const toggleRepeat = () => dispatch(setIsRepeat(!isRepeat));
   const toggleShuffle = () => dispatch(setIsShuffle(!isShuffle));
   const togglePlay = () => dispatch(setIsPlay(!isPlaying));
@@ -122,7 +119,15 @@ export default function Bar() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isPlaying, currentTime, isDragging, currentTrack, dispatch, duration]);
+  }, [
+    isPlaying,
+    currentTime,
+    isDragging,
+    currentTrack,
+    dispatch,
+    duration,
+    handleNextTrack,
+  ]);
 
   if (!currentTrack) {
     return (
@@ -135,6 +140,7 @@ export default function Bar() {
       </div>
     );
   }
+
   return (
     <div className={styles.bar}>
       <div className={styles.bar__content}>
@@ -250,21 +256,27 @@ export default function Bar() {
                 </div>
               </div>
               <div className={styles.trackPlay__dislike}>
-                <div
-                  className={classNames(
-                    styles.player__btnShuffle,
-                    styles.btnIcon,
-                  )}
+                <button
+                  className={styles.likeBtn}
                   onClick={toggleLike}
+                  disabled={isLoading}
+                  title={
+                    isLike ? 'Убрать из избранного' : 'Добавить в избранное'
+                  }
                 >
-                  <svg className={styles.trackPlay__likeSvg}>
-                    <use
-                      xlinkHref={
-                        isLiked ? '/img/logo/dislike.svg' : '/img/logo/like.svg'
-                      }
-                    ></use>
-                  </svg>
-                </div>
+                  {isLoading ? (
+                    <span className={styles.likeSpinner} />
+                  ) : (
+                    <svg
+                      className={classNames(styles.trackPlay__likeSvg, {
+                        [styles.liked]: isLike,
+                      })}
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                  )}
+                </button>
               </div>
             </div>
           </div>

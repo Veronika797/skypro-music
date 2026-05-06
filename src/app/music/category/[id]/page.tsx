@@ -1,62 +1,38 @@
 'use client';
 
-import Centerblock from '@centerblock/Centerblock';
 import { useEffect, useState } from 'react';
-import { fetchSelectionTracks } from '@/services/tracks/tracksService';
-import { TypesTrack } from '@/SharedTypes/SharedTypes';
 import { useParams } from 'next/navigation';
-import styles from '../../main/page.module.css';
-import Navigation from '@navigation/Navigation';
-import Sidebar from '@sidebar/Sidebar';
-import Bar from '@bar/Bar';
-import AudioPlayer from '@/components/AudioPlayer';
+import Centerblock from '@components/Centerblock/Centerblock';
+import { fetchTracks } from '@services/tracks/tracksService';
+import { TypesTrack } from '@/SharedTypes/SharedTypes';
+
+const PLAYLIST_NAMES: Record<string, string> = {
+  '2': 'Плейлист дня',
+  '3': '100 танцевальных хитов',
+  '4': 'Инди-заряд',
+};
 
 export default function CategoryPage() {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams();
+  const id = params.id as string;
+
   const [tracks, setTracks] = useState<TypesTrack[]>([]);
-  const [playlistTitle, setPlaylistTitle] = useState<string>('Подборка');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const title = PLAYLIST_NAMES[id] || 'Плейлист';
 
   useEffect(() => {
-    const loadPlaylist = async () => {
-      const cleanId = Array.isArray(id) ? id[0] : id;
-      if (!cleanId) return;
-
+    const loadTracks = async () => {
       try {
-        setLoading(true);
-        const { name, tracks } = await fetchSelectionTracks(cleanId);
-        setPlaylistTitle(name);
-        setTracks(tracks);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Неизвестная ошибка');
-        setTracks([]);
-        setPlaylistTitle('Подборка');
+        const data = await fetchTracks();
+        setTracks(data);
+      } catch (error) {
+        console.error('Ошибка:', error);
       } finally {
         setLoading(false);
       }
     };
-
-    loadPlaylist();
+    loadTracks();
   }, [id]);
 
-  return (
-    <div className={styles.wrapper}>
-      <div className={styles.container}>
-        <main className={styles.main}>
-          <Navigation />
-          <Centerblock
-            tracks={tracks}
-            loading={loading}
-            error={error}
-            title={playlistTitle}
-          />
-          <Sidebar />
-        </main>
-        <Bar />
-        <AudioPlayer playlist={tracks} />
-      </div>
-    </div>
-  );
+  return <Centerblock tracks={tracks} loading={loading} title={title} />;
 }
