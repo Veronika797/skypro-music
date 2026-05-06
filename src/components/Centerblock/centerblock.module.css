@@ -28,6 +28,10 @@
   min-height: 0;
 }
 
+.centerblock__empty {
+  color: #fff;
+}
+
 .content__playlist {
   display: flex;
   flex-direction: column;

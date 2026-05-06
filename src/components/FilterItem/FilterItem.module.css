@@ -80,6 +80,8 @@
   cursor: pointer;
 }
 
-.filter__option:hover {
-  background: #2e2e2e;
+.filter__option--active {
+  color: rgba(182, 114, 255, 1);
+  text-decoration-line: underline;
+  font-weight: 600;
 }

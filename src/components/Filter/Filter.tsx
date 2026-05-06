@@ -1,6 +1,6 @@
 'use client';
 
-import { getUniqueValuesByKey, getUniqueYears } from '@utils/helper';
+import { getUniqueValuesByKey } from '@utils/helper';
 import styles from './Filter.module.css';
 import classNames from 'classnames';
 import { useMemo, useRef, useState } from 'react';
@@ -12,11 +12,11 @@ type FilterType = 'author' | 'year' | 'genre';
 interface FilterProps {
   tracks: TypesTrack[];
   currentFilter: {
-    author: string | null;
-    genre: string | null;
+    author: string[];
     year: string | null;
+    genre: string | null;
   };
-  onFilterChange: (type: FilterType, value: string) => void;
+  onFilterChange: (type: FilterType, value: string | string[] | null) => void;
 }
 
 export default function Filter({
@@ -35,11 +35,16 @@ export default function Filter({
     () => getUniqueValuesByKey(tracks, 'author').sort(),
     [tracks],
   );
-  const years = useMemo(() => getUniqueYears(tracks), [tracks]);
   const genres = useMemo(
     () => getUniqueValuesByKey(tracks, 'genre').sort(),
     [tracks],
   );
+
+  const yearOptions = [
+    { value: 'newest', label: 'Сначала новые' },
+    { value: 'oldest', label: 'Сначала старые' },
+    { value: 'default', label: 'По умолчанию' },
+  ];
 
   const handleCategoryClick = (filterName: FilterType) => {
     let left = 0;
@@ -64,56 +69,104 @@ export default function Filter({
     });
   };
 
+  const toggleAuthor = (authorName: string) => {
+    const isSelected = currentFilter.author.includes(authorName);
+    let newAuthors: string[];
+
+    if (isSelected) {
+      newAuthors = currentFilter.author.filter((a) => a !== authorName);
+    } else {
+      newAuthors = [...currentFilter.author, authorName];
+    }
+
+    onFilterChange('author', newAuthors);
+  };
+
   const getFilterItems = () => {
     if (!activeDropdown) return null;
 
-    const items =
-      activeDropdown === 'author'
-        ? authors
-        : activeDropdown === 'year'
-          ? years
-          : genres;
+    if (activeDropdown === 'year') {
+      return yearOptions.map((opt) => {
+        const isActive = currentFilter.year === opt.value;
+        return (
+          <FilterItem
+            key={opt.value}
+            text={opt.label}
+            isActive={isActive}
+            onClick={() => onFilterChange('year', isActive ? null : opt.value)}
+          />
+        );
+      });
+    }
 
-    return items.map((item) => {
-      const itemStr = String(item);
-      const isActive = currentFilter[activeDropdown] === itemStr;
+    if (activeDropdown === 'author') {
+      return authors.map((item) => {
+        const isActive = currentFilter.author.includes(item);
+        return (
+          <FilterItem
+            key={item}
+            text={item}
+            isActive={isActive}
+            onClick={() => toggleAuthor(item)}
+          />
+        );
+      });
+    }
 
-      return (
-        <FilterItem
-          key={itemStr}
-          text={itemStr}
-          isActive={isActive}
-          onClick={() => onFilterChange(activeDropdown, itemStr)}
-        />
-      );
-    });
+    if (activeDropdown === 'genre') {
+      return genres.map((item) => {
+        const isActive = currentFilter.genre === item;
+        return (
+          <FilterItem
+            key={item}
+            text={item}
+            isActive={isActive}
+            onClick={() => {
+              onFilterChange('genre', isActive ? null : item);
+            }}
+          />
+        );
+      });
+    }
+
+    return null;
+  };
+
+  const getYearButtonLabel = () => {
+    if (currentFilter.year === 'newest') return 'Сначала новые';
+    if (currentFilter.year === 'oldest') return 'Сначала старые';
+    return 'году выпуска';
   };
 
   return (
     <div className={styles.filterContainer}>
       <div className={styles.filter__title}>Искать по:</div>
+
       <div
         ref={authorRef}
         className={classNames(styles.filter__button, {
-          [styles.active]: activeDropdown === 'author',
+          [styles.active]: currentFilter.author.length > 0,
         })}
         onClick={() => handleCategoryClick('author')}
       >
         исполнителю
       </div>
+
       <div
         ref={yearRef}
         className={classNames(styles.filter__button, {
-          [styles.active]: activeDropdown === 'year',
+          [styles.active]:
+            currentFilter.year !== null && currentFilter.year !== 'default',
         })}
         onClick={() => handleCategoryClick('year')}
       >
-        году выпуска
+        {getYearButtonLabel()}
       </div>
+
       <div
         ref={genreRef}
         className={classNames(styles.filter__button, {
-          [styles.active]: activeDropdown === 'genre',
+          [styles.active]: currentFilter.genre !== null,
         })}
         onClick={() => handleCategoryClick('genre')}
       >
