@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { BASE_URL } from '@services/constants';
 import { PlayListType, TypesTrack } from '@/SharedTypes/SharedTypes';
+import { toast } from 'react-toastify';
 
 interface ApiResponse<T> {
   success: boolean;
@@ -52,9 +53,9 @@ export const getAllTracks = (): Promise<TypesTrack[]> => {
     })
     .catch((error) => {
       if (error instanceof Error) {
-        console.error('Ошибка загрузки подборки:', error.message);
+        toast.error(`Ошибка загрузки подборки: ${error.message}`);
       } else {
-        console.error('Ошибка загрузки подборки: Неизвестная ошибка');
+        toast.error('Ошибка загрузки подборки: Неизвестная ошибка');
       }
       throw error;
     });
@@ -68,9 +69,9 @@ export const getTracksSelection = async (id: string): Promise<PlayListType> => {
     })
     .catch((error) => {
       if (error instanceof Error) {
-        console.error('Ошибка загрузки подборки:', error.message);
+        toast.error(`Ошибка загрузки подборки: ${error.message}`);
       } else {
-        console.error('Ошибка загрузки подборки: Неизвестная ошибка');
+        toast.error('Ошибка загрузки подборки: Неизвестная ошибка');
       }
       throw error;
     });

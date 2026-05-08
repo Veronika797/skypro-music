@@ -1,4 +1,5 @@
 import { BASE_URL } from '../services/constants';
+import { toast } from 'react-toastify';
 
 export interface LoginCredentials {
   email: string;
@@ -30,22 +31,24 @@ export const authService = {
         },
         body: JSON.stringify(credentials),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
-        throw new Error(data.message || 'Ошибка входа');
+        const errorMessage = data.message || 'Ошибка входа';
+        toast.error(errorMessage);
+        return { success: false, message: errorMessage };
       }
-      
+
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
-      throw new Error('Произошла ошибка при входе');
+      const errorMessage =
+        error instanceof Error ? error.message : 'Произошла ошибка при входе';
+      toast.error(errorMessage);
+      return { success: false, message: errorMessage };
     }
   },
-  
+
   async register(data: RegisterData): Promise<AuthResponse> {
     try {
       const response = await fetch(`${BASE_URL}/auth/register/`, {
@@ -55,34 +58,39 @@ export const authService = {
         },
         body: JSON.stringify(data),
       });
-      
+
       const result = await response.json();
-      
+
       if (!response.ok) {
-        throw new Error(result.message || 'Ошибка регистрации');
+        const errorMessage = result.message || 'Ошибка регистрации';
+        toast.error(errorMessage);
+        return { success: false, message: errorMessage };
       }
-      
+
       return result;
     } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
-      throw new Error('Произошла ошибка при регистрации');
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Произошла ошибка при регистрации';
+      toast.error(errorMessage);
+      return { success: false, message: errorMessage };
     }
   },
-  
+
   async logout(): Promise<{ success: boolean; message: string }> {
     try {
       const response = await fetch(`${BASE_URL}/auth/logout/`, {
         method: 'POST',
       });
-      
-      return await response.json();
+
+      const result = await response.json();
+      return result;
     } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
-      throw new Error('Произошла ошибка при выходе');
+      const errorMessage =
+        error instanceof Error ? error.message : 'Произошла ошибка при выходе';
+      toast.error(errorMessage);
+      return { success: false, message: errorMessage };
     }
-  }
+  },
 };
