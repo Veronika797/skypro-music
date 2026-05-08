@@ -4,10 +4,11 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './sidebar.module.css';
+import { SidebarSkeleton } from './SidebarSkeleton';
 import { useAppSelector } from '@store/store';
 import { useLogout } from '@hooks/useLogout';
 
-export default function Sidebar() {
+export default function Sidebar({ loading = false }: { loading?: boolean }) {
   const router = useRouter();
   const { username } = useAppSelector((state) => state.auth);
   const logout = useLogout();
@@ -16,6 +17,10 @@ export default function Sidebar() {
     e.preventDefault();
     router.push(`/music/category/${id}`);
   };
+
+  if (loading) {
+    return <SidebarSkeleton />;
+  }
 
   return (
     <div className={styles.main__sidebar}>

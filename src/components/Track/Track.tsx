@@ -1,6 +1,7 @@
 'use client';
 
 import styles from './Track.module.css';
+import { TrackSkeleton } from './TrackSkeleton';
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
 import { useAppDispatch, useAppSelector } from '@store/store';
 import {
@@ -72,9 +73,7 @@ export default function Track({ tracks, isLoading = false }: TrackProps) {
       </div>
 
       {isLoading ? (
-        <div style={{ padding: '20px', textAlign: 'start', color: '#b3b3b3' }}>
-          Загрузка треков...
-        </div>
+        <TrackSkeleton />
       ) : (
         tracks.map((track) => (
           <TrackItem
