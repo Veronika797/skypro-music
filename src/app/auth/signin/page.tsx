@@ -51,9 +51,7 @@ export default function Signin() {
       dispatch(setAccessToken(tokens.access));
       dispatch(setRefreshToken(tokens.refresh));
 
-      // localStorage.setItem('access', tokens.access);
-      // localStorage.setItem('refresh', tokens.refresh);
-      // localStorage.setItem('username', email);
+
 
       router.replace('/music/main');
     } catch (error: unknown) {

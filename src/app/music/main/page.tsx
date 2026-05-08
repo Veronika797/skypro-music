@@ -33,7 +33,11 @@ export default function MusicMainPage() {
           dispatch(setFavoriteTracks(favArray));
         }
       } catch (error) {
-        console.error('Ошибка загрузки данных:', error);
+        if (error instanceof Error) {
+          console.error('Ошибка загрузки данных:', error.message);
+        } else {
+          console.error('Ошибка загрузки данных: Неизвестная ошибка');
+        }
       } finally {
         setLoading(false);
       }

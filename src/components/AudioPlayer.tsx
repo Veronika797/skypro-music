@@ -134,14 +134,14 @@ const AudioPlayer = ({ playlist }: AudioPlayerProps) => {
   const handleError = useCallback(
     (e: Event) => {
       const audio = e.target as HTMLAudioElement;
-      console.error('Audio error:', {
-        error: audio.error,
-        src: audio.src,
-        name: currentTrack?.name,
-      });
+      if (audio.error instanceof Error) {
+        console.error('Audio error:', audio.error.message);
+      } else {
+        console.error('Audio error: Неизвестная ошибка');
+      }
       dispatch(setIsPlay(false));
     },
-    [currentTrack, dispatch],
+    [dispatch],
   );
 
   useEffect(() => {

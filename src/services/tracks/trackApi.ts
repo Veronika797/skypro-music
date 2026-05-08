@@ -51,7 +51,11 @@ export const getAllTracks = (): Promise<TypesTrack[]> => {
       return [];
     })
     .catch((error) => {
-      console.error('Ошибка загрузки подборки:', error);
+      if (error instanceof Error) {
+        console.error('Ошибка загрузки подборки:', error.message);
+      } else {
+        console.error('Ошибка загрузки подборки: Неизвестная ошибка');
+      }
       throw error;
     });
 };
@@ -63,7 +67,11 @@ export const getTracksSelection = async (id: string): Promise<PlayListType> => {
       return res.data;
     })
     .catch((error) => {
-      console.error('Ошибка загрузки подборки:', error);
+      if (error instanceof Error) {
+        console.error('Ошибка загрузки подборки:', error.message);
+      } else {
+        console.error('Ошибка загрузки подборки: Неизвестная ошибка');
+      }
       throw error;
     });
 };

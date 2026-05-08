@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://webdev-music-003b5b991590.herokuapp.com';
+import { BASE_URL } from '../services/constants';
 
 export interface LoginCredentials {
   email: string;
@@ -23,7 +23,7 @@ export interface AuthResponse {
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/login/`, {
+      const response = await fetch(`${BASE_URL}/auth/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const authService = {
   
   async register(data: RegisterData): Promise<AuthResponse> {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/register/`, {
+      const response = await fetch(`${BASE_URL}/auth/register/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export const authService = {
   
   async logout(): Promise<{ success: boolean; message: string }> {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/logout/`, {
+      const response = await fetch(`${BASE_URL}/auth/logout/`, {
         method: 'POST',
       });
       
