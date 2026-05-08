@@ -51,6 +51,7 @@ export const getAllTracks = (): Promise<TypesTrack[]> => {
       return [];
     })
     .catch((error) => {
+      console.error('Ошибка загрузки подборки:', error);
       throw error;
     });
 };
@@ -62,6 +63,7 @@ export const getTracksSelection = async (id: string): Promise<PlayListType> => {
       return res.data;
     })
     .catch((error) => {
+      console.error('Ошибка загрузки подборки:', error);
       throw error;
     });
 };
@@ -72,7 +74,7 @@ export const fetchFavoriteTracks = async (token: string) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  return res.data?.data || res.data;
+  return res.data?.data || res.data || [];
 };
 
 export const addLike = async (

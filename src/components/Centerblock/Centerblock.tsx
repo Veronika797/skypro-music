@@ -156,7 +156,7 @@ export default function Centerblock({
       />
 
       <div className={styles.centerblock__content}>
-        {processedTracks.length === 0 ? (
+        {processedTracks.length === 0 && !isLoading ? (
           <div className={styles.centerblock__empty}>Нет подходящих треков</div>
         ) : (
           <Track tracks={processedTracks} isLoading={isLoading} />
