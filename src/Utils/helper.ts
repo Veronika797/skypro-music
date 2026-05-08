@@ -2,10 +2,30 @@ export function formatTime(time: number): string {
   if (time == null || isNaN(time) || !isFinite(time)) {
     return '00:00';
   }
-  const minutes = Math.floor(time / 60);
-  const inputSecond = Math.floor(time % 60);
-  const outputSecond = inputSecond < 10 ? `0${inputSecond}` : `${inputSecond}`;
-  return `${minutes}:${outputSecond}`;
+
+  const isNegative = time < 0;
+  const absTime = Math.abs(time);
+
+  const minutes = Math.floor(absTime / 60);
+  let seconds = Math.floor(absTime % 60);
+
+  if (isNegative) {
+    seconds = -seconds;
+  }
+
+  const outputMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
+  const absSeconds = Math.abs(seconds);
+  const outputSeconds =
+    seconds < 0
+      ? absSeconds < 10
+        ? `-0${absSeconds}`
+        : `-${absSeconds}`
+      : absSeconds < 10
+        ? `0${absSeconds}`
+        : `${absSeconds}`;
+
+  return `${outputMinutes}:${outputSeconds}`;
 }
 
 export const getTimePanel = ({

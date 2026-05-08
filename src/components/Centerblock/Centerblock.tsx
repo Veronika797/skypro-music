@@ -1,4 +1,5 @@
 'use client';
+
 import styles from './centerblock.module.css';
 import Search from '@components/Search/Search';
 import Track from '@components/Track/Track';
@@ -26,19 +27,21 @@ export default function Centerblock({
   const [localLoading, setLocalLoading] = useState(!externalTracks);
   const [localError, setLocalError] = useState<string | null>(null);
 
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [currentFilter, setCurrentFilter] = useState({
-    author: null as string | null,
+    author: [] as string[],
     genre: null as string | null,
     year: null as string | null,
   });
 
   useEffect(() => {
-    setCurrentFilter({ author: null, genre: null, year: null });
+    setSearchQuery('');
+    setCurrentFilter({ author: [], genre: null, year: null });
   }, [externalTracks]);
 
   useEffect(() => {
     if (externalTracks) return;
-
     let isMounted = true;
     const loadTracks = async () => {
       try {
@@ -57,7 +60,6 @@ export default function Centerblock({
         if (isMounted) setLocalLoading(false);
       }
     };
-
     loadTracks();
     return () => {
       isMounted = false;
@@ -72,28 +74,71 @@ export default function Centerblock({
     return Array.isArray(data) ? data : [];
   }, [externalTracks, localTracks]);
 
-  const onFilterChange = (type: FilterType, value: string) => {
-    setCurrentFilter((prev) => ({
-      ...prev,
-      [type]: prev[type] === value ? null : value,
-    }));
+  const onFilterChange = (
+    type: FilterType,
+    value: string | string[] | null,
+  ) => {
+    setCurrentFilter(
+      (prev) =>
+        ({
+          ...prev,
+          [type]: value,
+        }) as typeof prev,
+    );
   };
 
-  const filteredTracks = useMemo(() => {
-    return tracks.filter((track) => {
-      if (currentFilter.author && track.author !== currentFilter.author)
-        return false;
-      if (currentFilter.genre && !track.genre?.includes(currentFilter.genre))
-        return false;
-      if (currentFilter.year) {
-        const trackYear = new Date(track.release_date).getFullYear().toString();
-        if (trackYear !== currentFilter.year) return false;
+  const getTimestamp = (dateStr?: string) => {
+    if (!dateStr) return 0;
+    const time = new Date(dateStr).getTime();
+    return isNaN(time) ? 0 : time;
+  };
+
+  const processedTracks = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    const filtered = tracks.filter((track) => {
+      const matchesSearch =
+        !query ||
+        track.name.toLowerCase().includes(query) ||
+        track.author.toLowerCase().includes(query) ||
+        (Array.isArray(track.genre) &&
+          track.genre.some((g) => g.toLowerCase().includes(query)));
+
+      if (!matchesSearch) return false;
+
+      if (currentFilter.author.length > 0) {
+        if (!currentFilter.author.includes(track.author)) return false;
       }
+
+      if (currentFilter.genre) {
+        const hasGenre = Array.isArray(track.genre)
+          ? track.genre.includes(currentFilter.genre)
+          : track.genre === currentFilter.genre;
+        if (!hasGenre) return false;
+      }
+
       return true;
     });
-  }, [tracks, currentFilter]);
 
-  const tracksToShow = filteredTracks;
+    const result = [...filtered];
+    if (currentFilter.year === 'newest') {
+      result.sort(
+        (a, b) => getTimestamp(b.release_date) - getTimestamp(a.release_date),
+      );
+    } else if (currentFilter.year === 'oldest') {
+      result.sort(
+        (a, b) => getTimestamp(a.release_date) - getTimestamp(b.release_date),
+      );
+    }
+
+    return result;
+  }, [
+    tracks,
+    searchQuery,
+    currentFilter.author,
+    currentFilter.genre,
+    currentFilter.year,
+  ]);
 
   if (error) {
     return <div className={styles.centerblock__error}>Ошибка: {error}</div>;
@@ -101,15 +146,21 @@ export default function Centerblock({
 
   return (
     <div className={styles.centerblock}>
-      <Search />
+      <Search value={searchQuery} onChange={setSearchQuery} />
       <h2 className={styles.centerblock__h2}>{title}</h2>
+
       <Filter
         tracks={tracks}
         currentFilter={currentFilter}
         onFilterChange={onFilterChange}
       />
+
       <div className={styles.centerblock__content}>
-        <Track tracks={tracksToShow} isLoading={isLoading} />
+        {processedTracks.length === 0 && !isLoading ? (
+          <div className={styles.centerblock__empty}>Нет подходящих треков</div>
+        ) : (
+          <Track tracks={processedTracks} isLoading={isLoading} />
+        )}
       </div>
     </div>
   );
