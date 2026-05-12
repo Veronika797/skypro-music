@@ -25,12 +25,7 @@ export default function CategoryPage() {
       try {
         const data = await fetchTracks();
         setTracks(data);
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error('Ошибка:', error.message);
-        } else {
-          console.error('Ошибка: Неизвестная ошибка');
-        }
+      } catch {
       } finally {
         setLoading(false);
       }

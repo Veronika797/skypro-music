@@ -26,12 +26,9 @@ export default function MusicLayout({
         const fetchedTracks = await fetchTracks();
         setTracks(fetchedTracks);
         setLoading(false);
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error('Ошибка загрузки треков:', error.message);
-        } else {
-          console.error('Ошибка загрузки треков: Неизвестная ошибка');
-        }
+      } catch {
+      } finally {
+        setLoading(false);
       }
     };
 
