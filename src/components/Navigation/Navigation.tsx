@@ -6,9 +6,11 @@ import styles from './navigation.module.css';
 import { useState } from 'react';
 import { useLogout } from '@hooks/useLogout';
 import { useAppSelector } from '@store/store';
+import { useTheme } from '@store/ThemeProvider';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   const logout = useLogout();
   const { access } = useAppSelector((state) => state.auth);
   const isAuthenticated = !!access;
@@ -16,6 +18,11 @@ export default function Navigation() {
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
+
+  const logoSrc = theme === 'light' ? '/img/logo_modal.png' : '/img/logo.png';
+  const themeToggleLabel = `Переключить на ${theme === 'light' ? 'тёмную' : 'светлую'} тему`;
+  const themeToggleIcon =
+    theme === 'light' ? '/img/logo/switch2.svg' : '/img/logo/switch.svg';
 
   return (
     <nav className={`${styles.main__nav} ${isMenuOpen ? styles.menuOpen : ''}`}>
@@ -25,7 +32,7 @@ export default function Navigation() {
             width={250}
             height={170}
             className={styles.logo__image}
-            src="/img/logo.png"
+            src={logoSrc}
             alt="logo"
             priority
           />
@@ -81,7 +88,7 @@ export default function Navigation() {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#ff4d4d',
+                  color: 'var(--exit)',
                   cursor: 'pointer',
                   width: '100%',
                   textAlign: 'left',
@@ -103,6 +110,22 @@ export default function Navigation() {
               </Link>
             </li>
           )}
+          <li className={styles.menu__item}>
+            <button
+              type="button"
+              className={styles.themeToggle}
+              onClick={toggleTheme}
+              aria-label={themeToggleLabel}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+              }}
+            >
+              <Image width={39} height={39} src={themeToggleIcon} alt="" />
+            </button>
+          </li>
         </ul>
       </div>
 

@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function NotFoundPage() {
   return (
     <div
       style={{
-        background: '#000',
+        background: 'var(--bg)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -17,7 +18,7 @@ export default function NotFoundPage() {
     >
       <div
         style={{
-          color: '#fff',
+          color: 'var(--text)',
           fontFamily: 'Montserrat',
           fontWeight: 600,
           fontSize: '160px',
@@ -31,7 +32,7 @@ export default function NotFoundPage() {
 
       <div
         style={{
-          color: '#fff',
+          color: 'var(--text)',
           fontFamily: 'Montserrat',
           fontWeight: 400,
           fontStyle: 'Regular',
@@ -46,6 +47,10 @@ export default function NotFoundPage() {
         Страница не найдена
       </div>
 
+      <div style={{ marginTop: '24px' }}>
+        <Image src="/img/sad.svg" alt="sad" width={120} height={120} />
+      </div>
+
       <Link
         href="/music/main"
         style={{
@@ -53,7 +58,7 @@ export default function NotFoundPage() {
           height: '52px',
           marginTop: '32px',
           backgroundColor: 'rgba(88, 14, 162, 1)',
-          color: 'white',
+          color: '#fff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

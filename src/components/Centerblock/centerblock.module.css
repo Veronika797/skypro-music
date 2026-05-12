@@ -2,11 +2,11 @@
   width: auto;
   flex-grow: 3;
   padding: 20px 40px 20px;
-  background-color: #181818;
+  background-color: var(--bg);
 }
 
 .centerblock__loading {
-  color: white;
+  color: var(--text);
   font-size: 18px;
   padding: 20px;
   text-align: center;
@@ -17,7 +17,7 @@
   line-height: 72px;
   letter-spacing: -0.8px;
   margin-bottom: 45px;
-  color: white;
+  color: var(--text);
   margin-top: 0;
 }
 
@@ -29,7 +29,7 @@
 }
 
 .centerblock__empty {
-  color: #fff;
+  color: var(--text);
 }
 
 .content__playlist {
@@ -142,7 +142,7 @@
 
 .track__titleLink,
 .track__authorLink {
-  color: #ffffff;
+  color: var(--text);
 }
 .track__albumLink {
   color: #696969;

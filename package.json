@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:open": "next dev & timeout 3 >nul & start http://localhost:3000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -41,6 +42,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
+    "open": "^11.0.0",
     "ts-jest": "^29.4.9",
     "typescript": "^5"
   }

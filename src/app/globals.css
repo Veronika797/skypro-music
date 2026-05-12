@@ -4,9 +4,48 @@
   box-sizing: border-box;
 }
 
+:root {
+  --text: #000;
+  --track: #fef8f8;
+  --background: #fff;
+  --bgTrack: rgba(246, 244, 244, 1);
+  --bg: #fff;
+  --burger: #000;
+  --bgSvg: rgba(246, 244, 244, 1);
+  --bgNvg: rgba(246, 245, 243, 1);
+  --nvg: rgba(246, 245, 243, 1);
+  --line: rgba(217, 217, 217, 1);
+  --svgPlay: rgba(177, 177, 177, 1);
+  --svg: rgba(105, 105, 105, 1);
+  --drdwn: #f5f5f5;
+  --exit: #000;
+}
+
+.dark {
+  --text: rgb(255, 255, 255);
+  --track: #2a2a2a;
+  --background: #000;
+  --bgTrack: rgb(49, 49, 49);
+  --bg: #181818;
+  --burger: #d3d3d3;
+  --bgSvg: rgba(49, 49, 49, 1);
+  --bgNvg: rgba(28, 28, 28, 1);
+  --nvg: rgb(42, 41, 41);
+  --line: rgba(46, 46, 46, 1);
+  --svgPlay: rgba(217, 217, 217, 1);
+  --svg: rgba(177, 177, 177, 1);
+  --drdwn: #313131;
+  --exit: #ff4d4d;
+}
+
 body {
-  font-family: var(--font-montserrat);
+  font-family: var(--font-montserrat), 'Arial', sans-serif;
+  background-color: var(--background);
+  color: var(--text);
   margin: 0;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 h1,
@@ -22,9 +61,15 @@ p {
 a,
 input,
 button {
-  font-family: var(--font-montserrat), 'Arial';
+  font-family: var(--font-montserrat), 'Arial', sans-serif;
 }
 
 a {
   text-decoration: none;
+}
+
+[style*='rgba(177, 177, 177, 1)'],
+.bg-static-gray {
+  background-color: rgba(177, 177, 177, 1) !important;
+  color: #000;
 }

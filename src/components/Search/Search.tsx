@@ -1,4 +1,5 @@
 'use client';
+import { useTheme } from '@store/ThemeProvider';
 import styles from './Search.module.css';
 
 interface SearchProps {
@@ -7,10 +8,15 @@ interface SearchProps {
 }
 
 export default function Search({ value, onChange }: SearchProps) {
+  const { theme } = useTheme();
+
+  const searchIcon =
+    theme === 'light' ? '/img/logo/search2.svg' : '/img/logo/search.svg';
+
   return (
     <div className={styles.centerblock__search}>
       <svg className={styles.search__svg}>
-        <use xlinkHref="/img/logo/search.svg"></use>
+        <use xlinkHref={searchIcon}></use>
       </svg>
       <input
         className={styles.search__text}
