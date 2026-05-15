@@ -12,6 +12,17 @@ const getLocalFavoriteIds = (): number[] => {
   }
 };
 
+const getLocalFavoriteTracks = (): TypesTrack[] => {
+  if (typeof window === 'undefined') return [];
+  const saved = localStorage.getItem('favoriteTracks');
+  try {
+    const parsed = JSON.parse(saved || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
 interface TrackState {
   currentTrack: TypesTrack | null;
   isPlay: boolean;
@@ -36,7 +47,7 @@ const initialState: TrackState = {
   duration: 0,
   volume: 50,
   isMuted: false,
-  favoriteTracks: [],
+  favoriteTracks: getLocalFavoriteTracks(),
   favoriteTrackIds: getLocalFavoriteIds(),
 };
 
@@ -92,6 +103,14 @@ const trackSlice = createSlice({
           state.favoriteTrackIds.push(payloadId);
         }
       }
+      localStorage.setItem(
+        'favoriteTracks',
+        JSON.stringify(state.favoriteTracks),
+      );
+      localStorage.setItem(
+        'localFavoriteTrackIds',
+        JSON.stringify(state.favoriteTrackIds),
+      );
     },
 
     removeLikedTracks: (state, action: PayloadAction<TypesTrack>) => {
@@ -102,6 +121,14 @@ const trackSlice = createSlice({
       state.favoriteTrackIds = state.favoriteTrackIds.filter(
         (id) => id !== payloadId,
       );
+      localStorage.setItem(
+        'favoriteTracks',
+        JSON.stringify(state.favoriteTracks),
+      );
+      localStorage.setItem(
+        'localFavoriteTrackIds',
+        JSON.stringify(state.favoriteTrackIds),
+      );
     },
 
     setFavoriteTracks: (state, action: PayloadAction<TypesTrack[]>) => {
@@ -109,6 +136,8 @@ const trackSlice = createSlice({
 
       const ids = action.payload.map((track) => Number(track._id));
       state.favoriteTrackIds = ids;
+
+      localStorage.setItem('favoriteTracks', JSON.stringify(action.payload));
       localStorage.setItem('localFavoriteTrackIds', JSON.stringify(ids));
     },
 
@@ -116,7 +145,7 @@ const trackSlice = createSlice({
       state.currentTrack = action.payload;
       state.isPlay = true;
       state.currentTime = 0;
-      state.duration = action.payload.duration || 0;
+      state.duration = action.payload.duration_in_seconds || 0;
     },
     setIsPlay: (state, action: PayloadAction<boolean>) => {
       state.isPlay = action.payload;

@@ -18,7 +18,8 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
-  const { isLike, toggleLike, isLoading } = useLikeTrack(currentTrack);
+  const { favoriteTrackIds } = useAppSelector((state) => state.tracks);
+  const { toggleLike, isLoading } = useLikeTrack();
   const volume = useAppSelector((state) => state.tracks.volume);
   const isMuted = useAppSelector((state) => state.tracks.isMuted);
   const currentTime = useAppSelector((state) => state.tracks.currentTime);
@@ -58,10 +59,28 @@ export default function Bar() {
   const handleProgressMouseUp = () => setIsDragging(false);
   const handleProgressMouseLeave = () => setIsDragging(false);
 
+  const currentIndex = currentTrack
+    ? playlist.findIndex((t) => t._id === currentTrack._id)
+    : -1;
+
+  const canGoPrev = isShuffle || isRepeat || currentIndex > 0;
+  const canGoNext = isShuffle || isRepeat || currentIndex < playlist.length - 1;
+
   const handlePrevTrack = () => {
     if (!playlist.length || !currentTrack) return;
+
     const currentIndex = playlist.findIndex((t) => t._id === currentTrack._id);
-    const prevIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+    const canGoPrev = isShuffle || isRepeat || currentIndex > 0;
+
+    if (!canGoPrev) return;
+
+    let prevIndex;
+    if (isShuffle) {
+      prevIndex = Math.floor(Math.random() * playlist.length);
+    } else {
+      prevIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+    }
+
     dispatch(setCurrentTrack(playlist[prevIndex]));
     dispatch(setIsPlay(true));
   };
@@ -69,24 +88,26 @@ export default function Bar() {
   const handleNextTrack = useCallback(() => {
     if (!playlist.length || !currentTrack) return;
 
+    const currentIndex = playlist.findIndex((t) => t._id === currentTrack._id);
+    const canGoNext =
+      isShuffle || isRepeat || currentIndex < playlist.length - 1;
+
+    if (!canGoNext) return;
+
     if (isRepeat) {
       dispatch(setCurrentTime(0));
       dispatch(setIsPlay(true));
       return;
     }
 
+    let nextIndex;
     if (isShuffle) {
-      const randomIndex = Math.floor(Math.random() * playlist.length);
-      dispatch(setCurrentTrack(playlist[randomIndex]));
-      dispatch(setIsPlay(true));
+      nextIndex = Math.floor(Math.random() * playlist.length);
     } else {
-      const currentIndex = playlist.findIndex(
-        (t) => t._id === currentTrack._id,
-      );
-      const nextIndex = (currentIndex + 1) % playlist.length;
-      dispatch(setCurrentTrack(playlist[nextIndex]));
-      dispatch(setIsPlay(true));
+      nextIndex = (currentIndex + 1) % playlist.length;
     }
+    dispatch(setCurrentTrack(playlist[nextIndex]));
+    dispatch(setIsPlay(true));
   }, [playlist, currentTrack, isRepeat, isShuffle, dispatch]);
 
   const toggleRepeat = () => dispatch(setIsRepeat(!isRepeat));
@@ -128,6 +149,15 @@ export default function Bar() {
     duration,
     handleNextTrack,
   ]);
+
+  const isLiked = currentTrack
+    ? favoriteTrackIds.includes(Number(currentTrack._id))
+    : false;
+
+  const handleLikeClick = () => {
+    if (!currentTrack) return;
+    toggleLike(currentTrack, isLiked);
+  };
 
   if (!currentTrack) {
     return (
@@ -172,8 +202,15 @@ export default function Bar() {
           <div className={styles.bar__player}>
             <div className={styles.player__controls}>
               <div
-                className={classNames(styles.player__btnPrev, styles.btn)}
+                className={classNames(styles.player__btnPrev, styles.btn, {
+                  [styles.btnDisabled]: !canGoPrev,
+                })}
                 onClick={handlePrevTrack}
+                aria-disabled={!canGoPrev}
+                style={{
+                  opacity: canGoPrev ? 1 : 0.5,
+                  cursor: canGoPrev ? 'pointer' : 'not-allowed',
+                }}
               >
                 <svg className={styles.player__btnPrevSvg}>
                   <use xlinkHref="/img/logo/prev.svg"></use>
@@ -192,8 +229,15 @@ export default function Bar() {
                 </svg>
               </div>
               <div
-                className={classNames(styles.player__btnNext, styles.btn)}
+                className={classNames(styles.player__btnNext, styles.btn, {
+                  [styles.btnDisabled]: !canGoNext,
+                })}
                 onClick={handleNextTrack}
+                aria-disabled={!canGoNext}
+                style={{
+                  opacity: canGoNext ? 1 : 0.5,
+                  cursor: canGoNext ? 'pointer' : 'not-allowed',
+                }}
               >
                 <svg className={styles.player__btnNextSvg}>
                   <use xlinkHref="/img/logo/next.svg"></use>
@@ -258,10 +302,10 @@ export default function Bar() {
               <div className={styles.trackPlay__dislike}>
                 <button
                   className={styles.likeBtn}
-                  onClick={toggleLike}
+                  onClick={handleLikeClick}
                   disabled={isLoading}
                   title={
-                    isLike ? 'Убрать из избранного' : 'Добавить в избранное'
+                    isLiked ? 'Убрать из избранного' : 'Добавить в избранное'
                   }
                 >
                   {isLoading ? (
@@ -269,7 +313,7 @@ export default function Bar() {
                   ) : (
                     <svg
                       className={classNames(styles.trackPlay__likeSvg, {
-                        [styles.liked]: isLike,
+                        [styles.liked]: isLiked,
                       })}
                       viewBox="0 0 24 24"
                     >

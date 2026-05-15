@@ -4,7 +4,6 @@ export interface TypesTrack {
   author: string;
   release_date: string;
   genre: string[];
-  duration: number;
   duration_in_seconds: number;
   album: string;
   logo: null | string;
@@ -13,7 +12,7 @@ export interface TypesTrack {
 }
 
 export type PlayListType = {
-  items: number[];
+  items: number[] | string[];
   name: string;
   _id: number;
   logo: null | string;

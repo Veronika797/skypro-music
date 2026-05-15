@@ -66,6 +66,7 @@ export default function Sidebar({ loading = false }: { loading?: boolean }) {
                   alt={playlist.alt}
                   width={250}
                   height={170}
+                  loading="eager"
                 />
               </a>
             </div>
