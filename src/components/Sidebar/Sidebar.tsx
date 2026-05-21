@@ -4,18 +4,28 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './sidebar.module.css';
+import { SidebarSkeleton } from './SidebarSkeleton';
 import { useAppSelector } from '@store/store';
 import { useLogout } from '@hooks/useLogout';
+import { useTheme } from '@store/ThemeProvider';
 
-export default function Sidebar() {
+export default function Sidebar({ loading = false }: { loading?: boolean }) {
   const router = useRouter();
   const { username } = useAppSelector((state) => state.auth);
   const logout = useLogout();
+  const { theme } = useTheme();
 
   const handlePlaylistClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     router.push(`/music/category/${id}`);
   };
+
+  if (loading) {
+    return <SidebarSkeleton />;
+  }
+
+  const logoutIcon =
+    theme === 'light' ? '/img/logo/logout2.svg' : '/img/logo/logout.svg';
 
   return (
     <div className={styles.main__sidebar}>
@@ -31,8 +41,8 @@ export default function Sidebar() {
           className={styles.sidebar__icon}
           title="Выйти"
         >
-          <svg width="20" height="20">
-            <use xlinkHref="/img/logo/logout.svg"></use>
+          <svg width="40" height="40">
+            <use xlinkHref={logoutIcon}></use>
           </svg>
         </Link>
       </div>
@@ -56,6 +66,7 @@ export default function Sidebar() {
                   alt={playlist.alt}
                   width={250}
                   height={170}
+                  loading="eager"
                 />
               </a>
             </div>

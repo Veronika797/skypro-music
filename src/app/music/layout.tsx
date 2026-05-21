@@ -1,32 +1,34 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ReactNode } from 'react';
 import styles from './layout.module.css';
 import Bar from '@components/Bar/Bar';
 import Navigation from '@components/Navigation/Navigation';
 import Sidebar from '@components/Sidebar/Sidebar';
 import AudioPlayer from '@components/AudioPlayer';
-import {
-  fetchAllSelections,
-  fetchTracks,
-} from '@services/tracks/tracksService';
+import { fetchTracks } from '@services/tracks/tracksService';
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
 
 export default function MusicLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children:
+    | ReactNode
+    | ((props: { tracks: TypesTrack[]; loading: boolean }) => ReactNode);
 }) {
   const [tracks, setTracks] = useState<TypesTrack[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadTracks = async () => {
       try {
+        setLoading(true);
         const fetchedTracks = await fetchTracks();
         setTracks(fetchedTracks);
-        await fetchAllSelections();
-      } catch (error) {
-        console.error('Ошибка загрузки треков:', error);
+        setLoading(false);
+      } catch {
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -39,9 +41,11 @@ export default function MusicLayout({
         <main className={styles.main}>
           <Navigation />
 
-          {children}
+          {typeof children === 'function'
+            ? children({ tracks, loading })
+            : children}
 
-          <Sidebar />
+          <Sidebar loading={loading} />
         </main>
         <Bar />
         <footer className="footer"></footer>

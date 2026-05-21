@@ -47,13 +47,12 @@ export default function Signin() {
         throw new Error('Сервер не вернул токены доступа');
       }
 
+      localStorage.setItem('accessToken', tokens.access);
+      localStorage.setItem('refreshToken', tokens.refresh);
+
       dispatch(setUsername(email));
       dispatch(setAccessToken(tokens.access));
       dispatch(setRefreshToken(tokens.refresh));
-
-      // localStorage.setItem('access', tokens.access);
-      // localStorage.setItem('refresh', tokens.refresh);
-      // localStorage.setItem('username', email);
 
       router.replace('/music/main');
     } catch (error: unknown) {

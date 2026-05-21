@@ -10,9 +10,11 @@ export const fetchTracks = async (): Promise<TypesTrack[]> => {
     const response = await getAllTracks();
     return Array.isArray(response) ? response : [];
   } catch (error) {
-    throw new Error(
-      'Не удалось загрузить треки. Проверьте подключение к интернету.',
-    );
+    if (error instanceof Error) {
+      throw new Error(`Не удалось загрузить треки: ${error.message}`);
+    } else {
+      throw new Error('Не удалось загрузить треки. Проверьте подключение к интернету.');
+    }
   }
 };
 
@@ -54,6 +56,10 @@ export const fetchSelectionTracks = async (
       tracks: filteredTracks,
     };
   } catch (error) {
-    throw new Error('Не удалось загрузить подборку');
+    if (error instanceof Error) {
+      throw new Error(`Не удалось загрузить подборку: ${error.message}`);
+    } else {
+      throw new Error('Не удалось загрузить подборку');
+    }
   }
 };

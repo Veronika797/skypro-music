@@ -1,6 +1,7 @@
 'use client';
 
 import styles from './centerblock.module.css';
+import { TrackSkeleton } from '@components/Track/TrackSkeleton';
 import Search from '@components/Search/Search';
 import Track from '@components/Track/Track';
 import Filter from '@components/Filter/Filter';
@@ -14,7 +15,7 @@ interface CenterblockProps {
   tracks?: TypesTrack[];
   loading?: boolean;
   error?: string | null;
-  title?: string;
+  title: string;
 }
 
 export default function Centerblock({
@@ -156,7 +157,9 @@ export default function Centerblock({
       />
 
       <div className={styles.centerblock__content}>
-        {processedTracks.length === 0 && !isLoading ? (
+        {isLoading ? (
+          <TrackSkeleton />
+        ) : processedTracks.length === 0 ? (
           <div className={styles.centerblock__empty}>Нет подходящих треков</div>
         ) : (
           <Track tracks={processedTracks} isLoading={isLoading} />

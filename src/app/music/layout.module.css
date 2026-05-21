@@ -2,13 +2,13 @@
   width: 100%;
   min-height: 100%;
   overflow: scroll;
-  background-color: #181818;
+  background-color: var(--bg);
 }
 
 .container {
   height: 100vh;
   position: relative;
-  background-color: #181818;
+  background-color: var(--bg);
 }
 
 .main {
@@ -30,7 +30,7 @@
 
 .main__nav {
   width: 244px;
-  background-color: #181818;
+  background-color: var(--bg);
   padding: 20px 0 20px 36px;
 }
 

@@ -8,6 +8,7 @@ import {
   setDuration,
 } from '@store/features/trackSlice';
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
+import { useToast } from '@hooks/useToast';
 
 type AudioPlayerProps = {
   playlist: TypesTrack[];
@@ -16,6 +17,7 @@ type AudioPlayerProps = {
 const AudioPlayer = ({ playlist }: AudioPlayerProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const dispatch = useAppDispatch();
+  const { showError } = useToast();
 
   const volume = useAppSelector((state) => state.tracks.volume);
   const isMuted = useAppSelector((state) => state.tracks.isMuted);
@@ -134,14 +136,14 @@ const AudioPlayer = ({ playlist }: AudioPlayerProps) => {
   const handleError = useCallback(
     (e: Event) => {
       const audio = e.target as HTMLAudioElement;
-      console.error('Audio error:', {
-        error: audio.error,
-        src: audio.src,
-        name: currentTrack?.name,
-      });
+      const error = audio.error;
+      const message =
+        error?.message ||
+        `Ошибка воспроизведения (код: ${error?.code || 'unknown'})`;
+      showError(message);
       dispatch(setIsPlay(false));
     },
-    [currentTrack, dispatch],
+    [dispatch, showError],
   );
 
   useEffect(() => {

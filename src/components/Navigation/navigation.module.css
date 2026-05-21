@@ -1,6 +1,7 @@
 .main__nav {
   min-width: 244px;
-  background-color: #181818;
+  width: 280px;
+  background-color: var(--bg);
   padding: 20px 0 20px 36px;
   position: relative;
   height: 100vh;
@@ -8,7 +9,7 @@
 }
 
 .main__nav.menuOpen {
-  background-color: rgb(42 41 41);
+  background-color: var(--bgNvg);
 }
 
 .nav__header {
@@ -29,7 +30,7 @@
 .logo__image {
   width: 113.33px;
   height: 17px;
-  color: #181818;
+  color: var(--bg);
 }
 
 .nav__burger {
@@ -44,7 +45,6 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 998;
@@ -54,7 +54,7 @@
   display: inline-block;
   width: 100%;
   height: 1px;
-  background-color: #d3d3d3;
+  background-color: var(--burger);
 }
 
 .nav__menu {
@@ -63,12 +63,11 @@
 
 .nav__menu.open {
   display: block;
-  position: fixed;
+  position: relative;
   left: 0;
   min-width: 244px;
   height: 100%;
   z-index: 999;
-  padding-left: 36px;
   transform: translateX(0);
   transition: transform 0.3s ease;
 }
@@ -103,9 +102,17 @@
 }
 
 .menu__link {
-  color: #ffffff;
+  color: var(--text);
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
   text-decoration: none;
+}
+
+.themeToggle img {
+  transition: transform 0.3s ease;
+}
+
+.themeToggle:hover img {
+  transform: rotate(360deg);
 }

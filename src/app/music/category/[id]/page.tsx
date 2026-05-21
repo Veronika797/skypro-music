@@ -2,37 +2,50 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import Centerblock from '@components/Centerblock/Centerblock';
-import { fetchTracks } from '@services/tracks/tracksService';
 import { TypesTrack } from '@/SharedTypes/SharedTypes';
-
-const PLAYLIST_NAMES: Record<string, string> = {
-  '2': 'Плейлист дня',
-  '3': '100 танцевальных хитов',
-  '4': 'Инди-заряд',
-};
+import { getAllTracks } from '@services/tracks/trackApi';
+import Centerblock from '@components/Centerblock/Centerblock';
+import { SelectionType } from '@services/catalogApi/types';
+import { getSelectionById } from '@services/catalogApi/catalogApi';
 
 export default function CategoryPage() {
-  const params = useParams();
-  const id = params.id as string;
-
+  const { id } = useParams();
+  const [selection, setSelection] = useState<SelectionType | null>(null);
   const [tracks, setTracks] = useState<TypesTrack[]>([]);
   const [loading, setLoading] = useState(true);
-  const title = PLAYLIST_NAMES[id] || 'Плейлист';
 
   useEffect(() => {
-    const loadTracks = async () => {
+    const loadPage = async () => {
+      if (!id || typeof id !== 'string') return;
+
+      setLoading(true);
       try {
-        const data = await fetchTracks();
-        setTracks(data);
-      } catch (error) {
-        console.error('Ошибка:', error);
+        const selectionData = await getSelectionById(id);
+        setSelection(selectionData);
+
+        const allTracks = await getAllTracks();
+
+        const selectedTracks = allTracks.filter((track) =>
+          selectionData.items?.includes(Number(track._id)),
+        );
+
+        setTracks(selectedTracks);
+      } catch {
+        setSelection(null);
+        setTracks([]);
       } finally {
         setLoading(false);
       }
     };
-    loadTracks();
+
+    loadPage();
   }, [id]);
 
-  return <Centerblock tracks={tracks} loading={loading} title={title} />;
+  return (
+    <Centerblock
+      tracks={tracks}
+      loading={loading}
+      title={selection?.name || 'Загрузка...'}
+    />
+  );
 }

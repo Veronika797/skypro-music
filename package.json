@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:open": "next dev & timeout 3 >nul & start http://localhost:3000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -16,11 +17,17 @@
     "@reduxjs/toolkit": "^2.11.2",
     "@types/react-redux": "^7.1.34",
     "axios": "^1.15.2",
+    "bcryptjs": "^3.0.3",
     "classnames": "^2.5.1",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.6.2",
     "next": "^16.1.6",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-redux": "^9.2.0"
+    "react-loading-skeleton": "^3.5.0",
+    "react-redux": "^9.2.0",
+    "react-toastify": "^11.1.0"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^16.1.6",
@@ -39,6 +46,8 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
+    "nodemon": "^3.1.14",
+    "open": "^11.0.0",
     "ts-jest": "^29.4.9",
     "typescript": "^5"
   }

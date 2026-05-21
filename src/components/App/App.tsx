@@ -3,7 +3,7 @@ import ProgressBar from '@components/ProgressBar/ProgressBar';
 import styles from './App.module.css';
 import { formatTime } from '@utils/helper';
 
-const currentTrack = 'https://path-to-your-audio-file.mp3';
+
 
 export default function App() {
   const [currentTime, setCurrentTime] = useState(0);
@@ -52,7 +52,7 @@ export default function App() {
     <div className={styles.app}>
       <h1>Полоса прогресса</h1>
       <audio
-        src={currentTrack}
+        src="https://path-to-your-audio-file.mp3"
         ref={audioRef}
         onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}

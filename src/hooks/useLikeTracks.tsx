@@ -5,19 +5,14 @@ import { addLikedTracks, removeLikedTracks } from '@store/features/trackSlice';
 import { addLike, removeLike } from '@services/tracks/trackApi';
 import { AxiosError } from 'axios';
 
-export const useLikeTrack = (track: TypesTrack | null) => {
-  const { favoriteTracks } = useAppSelector((state) => state.tracks);
+export const useLikeTrack = () => {
   const { access } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-
-  const isLike = favoriteTracks.some(
-    (t) => String(t._id) === String(track?._id),
-  );
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const toggleLike = async () => {
+  const toggleLike = async (track: TypesTrack, isLiked: boolean) => {
     if (!access) {
       setErrorMsg('Войдите в аккаунт, чтобы ставить лайки');
       setTimeout(() => setErrorMsg(null), 3000);
@@ -30,7 +25,7 @@ export const useLikeTrack = (track: TypesTrack | null) => {
     setErrorMsg(null);
 
     try {
-      if (isLike) {
+      if (isLiked) {
         await removeLike(access, track._id);
         dispatch(removeLikedTracks(track));
       } else {
@@ -56,5 +51,5 @@ export const useLikeTrack = (track: TypesTrack | null) => {
     }
   };
 
-  return { isLoading, errorMsg, toggleLike, isLike };
+  return { isLoading, errorMsg, toggleLike };
 };

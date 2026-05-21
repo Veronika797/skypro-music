@@ -11,6 +11,7 @@ interface TrackItemProps {
   track: TypesTrack;
   isActive: boolean;
   isPlaying: boolean;
+  number?: number;
   onClick: () => void;
 }
 
@@ -21,12 +22,17 @@ export function TrackItem({
   onClick,
 }: TrackItemProps) {
   const { access } = useAppSelector((state) => state.auth);
-  const { isLike, toggleLike, isLoading: isLiking } = useLikeTrack(track);
+  const { favoriteTrackIds } = useAppSelector((state) => state.tracks);
+
+  const { toggleLike, isLoading: isLiking } = useLikeTrack();
+
+  const isLiked = favoriteTrackIds.includes(Number(track._id));
   const isActiveAndPlaying = isActive && isPlaying;
 
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    toggleLike();
+    if (!access) return;
+    toggleLike(track, isLiked);
   };
 
   return (
@@ -71,7 +77,7 @@ export function TrackItem({
             className={styles.track__likeBtn}
             onClick={handleLikeClick}
             aria-label={
-              isLike ? 'Убрать из избранного' : 'Добавить в избранное'
+              isLiked ? 'Убрать из избранного' : 'Добавить в избранное'
             }
             disabled={!access || isLiking}
             data-testid="like-button"
@@ -82,7 +88,7 @@ export function TrackItem({
             title={
               !access
                 ? 'Войдите в аккаунт, чтобы ставить лайки'
-                : isLike
+                : isLiked
                   ? 'Убрать из избранного'
                   : 'Добавить в избранное'
             }
@@ -91,7 +97,7 @@ export function TrackItem({
               <span className={styles.likeSpinner} />
             ) : (
               <svg
-                className={`${styles.track__likeSvg} ${isLike ? styles.liked : ''}`}
+                className={`${styles.track__likeSvg} ${isLiked ? styles.liked : ''}`}
                 viewBox="0 0 24 24"
               >
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
